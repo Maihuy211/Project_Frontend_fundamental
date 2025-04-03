@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/register.css">
+    <title>Register</title>
+</head>
+<body>
+    <h3>Đăng Ký</h3>
+    <div class="register">
+        <input type="text" name="username" id="username" placeholder="Họ và tên">
+        <p id="errorName" class="error"></p>
+        <input type="email" id="email" name="email" placeholder="Địa chỉ email" required>
+        <p id="errorEmail" class="error"></p>
+        <input type="password" id="pass" name="pass" placeholder="Mật Khẩu">
+        <p id="errorPass" class="error"></p>
+        <input type="password" id="confirm" name="confirm" placeholder="Xác nhận mật khẩu">
+        <p id="errorConfirm" class="error"></p>
+        <button id="btn">Đăng Ký</button>
+        <p>Đã có tài khoản? <a href="/pages/login.html">Đăng Nhập</a></p>
+    </div>
+    <script src="/js/register.js"></script>
+</body>
+</html>

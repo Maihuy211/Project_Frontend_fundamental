@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết dự án</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Epilogue:ital,wght@0,100..900;1,100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Manrope:wght@200..800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/product-manager.css">
+</head>
+<body> 
+    <nav>
+        <h3>Quản Lí Dự Án</h3>
+        <div class="link">
+            <ul>
+                <li><a href="/pages/dashboard.html">Dự án</a></li>
+                <li><a href="/pages/category-manager.html">Nhiệm Vụ Của Tôi</a></li>
+                <li><a href="/pages/login.html">Đăng Xuất</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="title-container">
+        <div class="title-addMembers">  
+            <div class="title-text">
+                <h2>Xây dựng website thương mại điện tử</h2>
+                <p class="text">Dự án nhằm phát triển một nền tảng thương mại điện tử với các tính năng như giỏ hàng, thanh toán và quản lý sản phẩm.</p>
+            </div>
+            <div class="addMembers">
+                <div class="members">
+                    <h3 id="titleName">Thành viên</h3> 
+                    <button id="add-member">+ Thêm thành viên</button>
+                </div>
+                <div class="user-list">
+                    <div class="user">
+                        <div class="avatar blue">AN</div>
+                        <div class="user-info">
+                            <div class="name">An Nguyễn</div>
+                            <div class="role">Project owner</div>
+                        </div>
+                    </div>
+                    <div class="user">
+                        <div class="avatar purple">BA</div>
+                        <div class="user-info">
+                            <div class="name">Bách Nguyễn</div>
+                            <div class="role">Frontend developer</div>
+                        </div>
+                    </div>
+                    <div class="more"><img src="/assets/images/More_Horizontal.png" alt="meo" id="more"></div>
+                </div>
+            </div>
+        </div>
+        <div class="add-search">
+            <button id="addMission">+ Thêm Nhiệm vụ</button>
+            <div>
+                <select name="choose" id="choose" >
+                    <option value="" selected disabled hidden>Sắp xếp theo</option>
+                    <option value="">-----</option>
+                    <option value="">-----</option>
+                </select>
+                <input type="search" id="search-Mission" placeholder="Tìm kiếm nhiệm vụ">       
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <h3>Danh Sách Dự Án</h3>
+        <div class="table-container">     
+            <table>
+                <thead>
+                    <tr>
+                        <th class="col1">Tên Nhiệm Vụ</th>
+                        <th class="col2">Người Phụ Trách</th>
+                        <th class="col3">Ưu Tiên</th>
+                        <th class="col4">Ngày Bắt Đầu</th>
+                        <th class="col5">Hạn Chót</th>
+                        <th class="col6">Tiến độ</th>
+                        <th class="col7">Hành động</th>
+                    </tr>
+                </thead>
+            </table>
+            <details open>
+                <table>
+                    <tr>
+                        <summary><strong>To do</strong></summary>
+                    </tr>
+                    <tbody id="tableListTaskToDo">
+                </tbody>
+                </table>
+            </details>
+            <details open>
+                <table>
+                    <tr>
+                        <summary><strong>In Progress</strong></summary>
+                    </tr>
+                    <tbody id="tableListTaskInProgress">
+                    </tbody>
+                </table>
+            </details>
+            <details open>
+                <table>
+                    <tr>
+                        <summary><strong>Pending</strong></summary>
+                    </tr>
+                    <tbody id="tableListTaskPending">
+                    </tbody>
+                </table>
+            </details>
+            <details open>
+                <table>
+                    <tr>
+                        <summary><strong>Done</strong></summary>
+                    </tr>
+                    <tbody id="tableListTaskDone">
+                    </tbody>
+                </table>
+            </details>
+        </div>
+    </div>
+    <div id="overley-add">
+        <div id="missionAdd">
+            <div id="closeButton">
+                <div class="title-addMission">
+                    <h3>Thêm/sửa danh mục</h3>
+                    <img src="/assets/images/Vector.png" alt="meo" id="close">
+                </div>
+                <hr>
+                <div id="closeMenu">
+                    <label for="missionName">Tên nhiệm vụ</label>
+                    <input type="text" id="missionName">
+                    <p id="error-missionName" class="error-message"></p>
+
+                    <label for="user-charge">Người phụ trách</label>
+                    <select id="user-charge">
+                        <option value="user-charge" selected disabled hidden>Chọn người phụ trách</option>
+                        <option value="user1">User 1</option>
+                        <option value="user2">User 2</option>
+                        <option value="user3">User 3</option>
+                        <option value="user4">User 4</option>
+                    </select>
+                    <p id="error-userCharge" class="error-message"></p>
+
+                    <label for="status">Trạng thái</label>
+                    <select id="status">
+                        <option value="status" selected disabled hidden>Chọn trạng thái nhiệm vụ</option>
+                        <option value="To do">To do</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Done">Done</option>
+                    </select>
+                    <p id="error-status" class="error-message"></p>
+
+                    <label for="start-date">Ngày bắt đầu</label>
+                    <input type="date" id="start-date">
+                    <p id="error-startDate" class="error-message"></p>
+
+                    <label for="end-date">Hạn cuối</label>
+                    <input type="date" id="end-date">
+                    <p id="error-endDate" class="error-message"></p>
+
+                    <label for="priority">Độ ưu tiên</label>
+                    <select id="priority">
+                        <option value="choose" selected disabled hidden>Chọn độ ưu tiên</option>
+                        <option value="Thấp">Thấp</option>
+                        <option value="Trung bình">Trung bình</option>
+                        <option value="Cao">Cao</option>
+                    </select>
+                    <p id="error-priority" class="error-message"></p>
+
+                    <label for="progress">Tiến độ</label>
+                    <select id="progress">
+                        <option value="choose" selected disabled hidden>Chọn độ tiến độ</option>
+                        <option value="Đúng tiến dộ">Đúng tiến độ</option>
+                        <option value="Có rủi ro">Có rủi ro</option>
+                        <option value="Trễ hạn">Trễ hạn</option>
+                    </select>
+                    <p id="error-progress" class="error-message"></p>
+                    <hr>
+                    <div id="buttonpos">
+                        <button id="buttonCancel">Hủy</button>
+                        <button id="buttonAdd">Lưu</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="overley-del">
+        <div id="missionDelete">
+            <div id="closeButton-del"> 
+                <div class="title">
+                    <h3>Xác Nhận Xoá</h3>
+                    <img src="/assets/images/Vector.png" alt="meo" id="close-del">
+                </div>
+                <hr>
+                <div id="closeMenu-del">
+                    <p>Bạn chắc chắn muốn xoá nhiệm vụ này này</p> 
+                    <hr>
+                    <div id="buttonpos-del">
+                        <button id="buttonCancel-del">Hủy</button>
+                        <button id="buttonDelete">Xoá</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="overley-edt">
+        <div id="missionEdit">
+            <div class="title-addMission-edit">
+                <h3>Chỉnh sửa danh mục</h3>
+                <img src="/assets/images/Vector.png" alt="meo" id="close-edit">
+            </div>
+            <hr>
+            <div id="closeMenu-edit">
+                <label for="missionName-edit">Tên nhiệm vụ</label>
+                <input type="text" id="missionName-edit">
+                <p id="error-missionName-edit" class="error-message"></p>
+    
+                <label for="user-charge-edit">Người phụ trách</label>
+                <select id="user-charge-edit">
+                    <option value="user-charge-edit" selected disabled hidden>Chọn người phụ trách</option>
+                    <option value="user1">User 1</option>
+                    <option value="user2">User 2</option>
+                    <option value="user3">User 3</option>
+                    <option value="user4">User 4</option>
+                </select>
+                <p id="error-userCharge-edit" class="error-message"></p>
+    
+                <label for="status-edit">Trạng thái</label>
+                <select id="status-edit">
+                    <option value="status-edit" selected disabled hidden>Chọn trạng thái nhiệm vụ</option>
+                    <option value="To do">To do</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Done">Done</option>
+                </select>
+                <p id="error-status-edit" class="error-message"></p>
+    
+                <label for="start-date-edit">Ngày bắt đầu</label>
+                <input type="date" id="start-date-edit">
+                <p id="error-startDate-edit" class="error-message"></p>
+    
+                <label for="end-date-edit">Hạn cuối</label>
+                <input type="date" id="end-date-edit">
+                <p id="error-endDate-edit" class="error-message"></p>
+    
+                <label for="priority-edit">Độ ưu tiên</label>
+                <select id="priority-edit">
+                    <option value="priority-edit" selected disabled hidden>Chọn độ ưu tiên</option>
+                    <option value="Thấp">Thấp</option>
+                    <option value="Trung bình">Trung bình</option>
+                    <option value="Cao">Cao</option>
+                </select>
+                <p id="error-priority-edit" class="error-message"></p>
+    
+                <label for="progress-edit">Tiến độ</label>
+                <select id="progress-edit">
+                    <option value="progress-edit" selected disabled hidden>Chọn tiến độ</option>
+                    <option value="Đúng tiến độ">Đúng tiến độ</option>
+                    <option value="Có rủi ro">Có rủi ro</option>
+                    <option value="Trễ hạn">Trễ hạn</option>
+                </select>
+                <p id="error-progress-edit" class="error-message"></p>
+                <hr>
+                <div id="buttonpos-edit">
+                    <button id="buttonCance-edit">Hủy</button>
+                    <button id="buttonEdit">Lưu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="overleyRenderMembers">
+        <div class="moreMembers">
+            <div class="modal-header">
+                <h3>Thành viên</h3> 
+                <img src="/assets/images/Vector.png" alt="Đóng" id="closeMoreMembers">
+            </div>
+            <hr>
+            <div class="member-container">
+                <div class="user-header">
+                    <div class="user-title">Thành viên</div>
+                    <div class="role-title">Vai trò</div>
+                </div>
+                <div class="user">
+                    <div class="user-avatar">AN</div>
+                    <div class="user-info">
+                        <p class="user-name">An Nguyễn</p>
+                        <p class="user-email">nguyenquangan@gmail.com</p>
+                    </div>
+                    <input type="text" class="role-field">
+                    <img src="/assets/icons/Vector.png" alt="delete" id="delete-btn">
+                </div>
+                <div class="user">
+                    <div class="user-avatar">BA</div>
+                    <div class="user-info">
+                        <p class="user-name">Bách Nguyễn</p>
+                        <p class="user-email">bachnx@gmail.com</p>
+                    </div>
+                    <input type="text" class="role-field">
+                    <img src="/assets/icons/Vector.png" alt="delete" id="delete-btn">
+                </div>
+                <div class="user">
+                    <div class="user-avatar">DU</div>
+                    <div class="user-info">
+                        <p class="user-name">Dương Nguyễn</p>
+                        <p class="user-email">duongnhm@gmail.com</p>
+                    </div>
+                    <input type="text" class="role-field">
+                    <img src="/assets/icons/Vector.png" alt="delete" id="delete-btn">
+                </div>
+            </div>
+            <hr>
+            <div class="modal-footer">
+                <button id="cancel-btn">Đóng</button>
+                <button id="save-btn">Lưu</button>
+            </div>
+        </div>
+        
+    </div>
+
+
+    <div id="overley-addMember">
+        <div id="membersAdd">
+            <div id="closeButtonMembersAdd"> 
+                <div class="title">
+                    <h3>Thêm thành viên</h3>
+                    <img src="/assets/images/Vector.png" alt="meo" id="closeMembersAdd">
+                </div>
+                <hr>
+                <div id="closeMenuMembersAdd">
+                    <label for="projectName">Email</label>
+                    <input type="email" id="emailMember">
+                    <p id="error"></p> 
+                    <label for="projectName">Vai Trò</label>
+                    <input type="text" id="roleInput">
+                    <p id="error"></p> 
+                    <hr>
+                    <div id="buttonpos">
+                        <button id="buttonCancelMembersAdd">Hủy</button>
+                        <button id="buttonAddMembers">Lưu</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <footer>
+        <p>© 2025 Team management. All rights reserved.</p>
+    </footer>
+    <script src="/js/product-manager.js"></script>
+</body>
+</html>
