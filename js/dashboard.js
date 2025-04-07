@@ -1,97 +1,29 @@
-const projects = JSON.parse(localStorage.getItem("projects"))||[
-    { 
-        id: 1, 
-        projectName: "Xây dựng website thương mại điện tử",
-        members: [
-            { userId: 1, role: "Project owner" },
-            { userId: 2, role: "Frontend developer" }
-        ]
-    },
-    { 
-        id: 2, 
-        projectName: "Phát triển ứng dụng di động",
-        members: [
-            { userId: 1, role: "Project owner" },
-            { userId: 2, role: "Frontend developer" }
-        ]
-    },
-    { 
-        id: 3, 
-        projectName: "Quản lý dữ liệu khách hàng",
-        members: [
-            { userId: 1, role: "Project owner" },
-            { userId: 2, role: "Frontend developer" }
-        ]
-    },
-    { 
-        id: 4, 
-        projectName: "Xây dựng website thương mại điện tử",
-        members: [
-            { userId: 1, role: "Project owner" },
-            { userId: 2, role: "Frontend developer" }
-        ]
-    },
-    { 
-        id: 5, 
-        projectName: "Phát triển ứng dụng di động",
-        members: [
-            { userId: 1, role: "Project owner" },
-            { userId: 2, role: "Frontend developer" }
-        ]
-    },
-    { 
-        id: 6, 
-        projectName: "Quản lý dữ liệu khách hàng",
-        members: [
-            { userId: 1, role: "Project owner" },
-            { userId: 2, role: "Frontend developer" }
-        ]
-    },
-    { 
-        id: 7, 
-        projectName: "Xây dựng website thương mại điện tử",
-        members: [
-            { userId: 1, role: "Project owner" },
-            { userId: 2, role: "Frontend developer" }
-        ]
-    },
-    { 
-        id: 8, 
-        projectName: "Phát triển ứng dụng di động",
-        members: [
-            { userId: 1, role: "Project owner" },
-            { userId: 2, role: "Frontend developer" }
-        ]
-    },
-    { 
-        id: 9, 
-        projectName: "Quản lý dữ liệu khách hàng",
-        members: [
-            { userId: 1, role: "Project owner" },
-            { userId: 2, role: "Frontend developer" }
-        ]
-    }
-];
+const user = JSON.parse(localStorage.getItem("loggedInUser"));
+if (!user) {
+    window.location.href = "/pages/login.html";
+}
+const projects = JSON.parse(localStorage.getItem("projects")) || [];
 function save() {
     localStorage.setItem('projects', JSON.stringify(projects));
 }
 let currentPage = 1;
 const rowsPerPage = 4;
-
 function renderProject() {
     let listProject = document.getElementById("projects");
     listProject.innerHTML = "";
+    const userProjects = projects.filter(item => item.ownerId === user.id);
     const start = (currentPage - 1) * rowsPerPage;
-    const paginatedItems = projects.slice(start, start + rowsPerPage);  
+    const paginatedItems = userProjects.slice(start, start + rowsPerPage);
+    
     paginatedItems.forEach(item => {
         listProject.innerHTML += `
             <tr>
                 <td class="table-id">${item.id}</td>
                 <td>${item.projectName}</td>
                 <td class="action">
-                    <button class="btn" id="btn-edit" onclick="editProject(${item.id})">Sửa</button>
-                    <button class="btn" id="btn-delete" onclick="deleteProject(${item.id})">Xóa</button>
-                    <button class="btn " id="btn-detail" onclick="detailProject(${item.id})">Chi tiết</button>
+                    <button id="btn-edit" class="btn" onclick="editProject(${item.id})">Sửa</button>
+                    <button id="btn-delete" class="btn" onclick="deleteProject(${item.id})">Xóa</button>
+                    <button id="btn-detail" class="btn" onclick="detailProject(${item.id})">Chi tiết</button>
                 </td>
             </tr> 
         `;
@@ -102,7 +34,8 @@ function renderProject() {
 function renderPagination() {
     let pagination = document.querySelector(".pagination");
     pagination.innerHTML = "";
-    const totalPages = Math.ceil(projects.length / rowsPerPage);
+    const userProjects = projects.filter(item => item.ownerId === user.id); 
+    const totalPages = Math.ceil(userProjects.length / rowsPerPage); 
     
     pagination.innerHTML += `<li class="page-item"><a class="page-link" href="#" onclick="previousPage()"><</a></li>`;
     
@@ -131,41 +64,54 @@ function goToPage(page) {
 renderProject();
 // Thêm dự án
 let addButton = document.getElementById("addProject");
-let addProjcetButton = document.getElementById("buttonAdd");
+let addProjectButton = document.getElementById("buttonAdd"); // sửa từ 'addProjcetButton'
 let closeButton = document.getElementById("close");
 let cancelButton = document.getElementById("buttonCancel");
 let projectAdd = document.getElementById("overley-add");
-let projectDescriptionInput = document.getElementById("describe");
 let error = document.getElementById("error");
+let errorDescribe = document.getElementById("errorDescribe");
 let projectNameInput = document.getElementById("projectName");
+let describeInput = document.getElementById("describe");
+
 addButton.onclick = function () {
     projectNameInput.value = "";
-    projectDescriptionInput.value = "";
+    describeInput.value = "";
     error.style.display = "none";
+    errorDescribe.style.display = "none"; 
     projectAdd.style.display = "flex";
-    projectNameInput.style.borderBlockColor = "";
-    projectNameInput.style.borderRightColor = "";
-    projectNameInput.style.borderLeftColor = "";
-
+    projectNameInput.style.border = "";   
+    describeInput.style.border = "";      
 };
+
 closeButton.onclick = function () {
     projectAdd.style.display = "none";
 };
+
 cancelButton.onclick = function () {
     projectAdd.style.display = "none";
 };
-addProjcetButton.onclick = function () {
+
+addProjectButton.onclick = function () {
     addProject();
 };
 
 function addProject() {
+    let hasError = false;
     let inputValue = projectNameInput.value.trim();
+    let describeValue = describeInput.value.trim(); 
     if (inputValue === "") {
         error.textContent = "Tên dự án trống";
         error.style.display = "block";
-        projectNameInput.style.border="1px solid red";
-        return;
+        projectNameInput.style.border = "1px solid red";
+        hasError = true;
     }
+    if (describeValue === "") {
+        errorDescribe.textContent = "Tên mô tả trống";
+        errorDescribe.style.display = "flex";
+        describeInput.style.border = "1px solid red";
+        hasError = true;
+    }
+    if (hasError) return;
     let check = false;
     for (let i = 0; i < projects.length; i++) {
         if (projects[i].projectName.toLowerCase() === inputValue.toLowerCase()) {
@@ -176,7 +122,7 @@ function addProject() {
     if (check) {
         error.textContent = "Tên danh mục đã tồn tại";
         error.style.display = "block";
-        projectNameInput.style.border="1px solid red";
+        projectNameInput.style.border = "1px solid red";
         return;
     }
     let id = 1;
@@ -186,10 +132,14 @@ function addProject() {
     let newProject = {
         id: id,
         projectName: inputValue,
-        members: []
+        description : describeValue,
+        members: [],
+        ownerId: user.id
     };
     projects.push(newProject);
     projectNameInput.value = "";
+    describeInput.value = "";
+    errorDescribe.style.display = "none";
     error.style.display = "none";
     projectAdd.style.display = "none";
     save();
@@ -229,25 +179,38 @@ function deleteProject(id) {
 function editProject(id) {
     let projectEdit = document.getElementById("overley-edit");
     let projectNameEditInput = document.getElementById("projectNameEdit");
+    let describeEditInput = document.getElementById("describeEdit"); // Lấy phần mô tả
     let editError = document.getElementById("editError");
+    let editErrorDescribe = document.getElementById("editErrorDescribe"); 
 
     let project = projects.find((task) => task.id === id);
-    projectNameEditInput.value = project.projectName; 
+    projectNameEditInput.value = project.projectName;
+    describeEditInput.value = project.description || "";
     editError.style.display = "none";
+    editErrorDescribe.style.display = "none";
     projectEdit.style.display = "flex";
-    projectNameEditInput.style.borderBlockColor = "";
-    projectNameEditInput.style.borderRightColor = "";
-    projectNameEditInput.style.borderLeftColor = "";
+    projectNameEditInput.style.border = "";
+    describeEditInput.style.border = "";
 
-    let editProjcetButton = document.getElementById("buttonEdit");
-    editProjcetButton.onclick = function () {
+    let editProjectButton = document.getElementById("buttonEdit");
+    editProjectButton.onclick = function () {
         let inputValue = projectNameEditInput.value.trim();
+        let describeValue = describeEditInput.value.trim();
+        let hasError = false;
         if (inputValue === "") {
             editError.textContent = "Tên dự án trống";
             editError.style.display = "block";
-            projectNameInput.style.border="1px solid red";
-            return;
+            projectNameEditInput.style.border = "1px solid red"; 
+            hasError=true; 
         }
+
+        if (describeValue === "") {
+            editErrorDescribe.textContent = "Mô tả dự án trống";
+            editErrorDescribe.style.display = "block";
+            describeEditInput.style.border = "1px solid red";
+            hasError=true; 
+        } 
+        if (hasError) return;
         let check = false;
         for (let i = 0; i < projects.length; i++) {
             if (projects[i].projectName.toLowerCase() === inputValue.toLowerCase() && projects[i].id !== id) {
@@ -258,15 +221,13 @@ function editProject(id) {
         if (check) {
             editError.textContent = "Tên dự án đã tồn tại";
             editError.style.display = "block";
-            projectNameInput.style.border="1px solid red";
             return;
         }
         project.projectName = inputValue;
-        projectNameEditInput.value = "";
-        editError.style.display = "none";
+        project.description = describeValue;
         projectEdit.style.display = "none";
         save();
-        renderProject(); 
+        renderProject();
     };
     let closeEditButton = document.getElementById("close-edit");
     let cancelEditButton = document.getElementById("buttonCancelEdit");
@@ -276,7 +237,16 @@ function editProject(id) {
     cancelEditButton.onclick = function () {
         projectEdit.style.display = "none";
     };
+    projectNameEditInput.oninput = function () {
+        editError.style.display = "none";
+        projectNameEditInput.style.border = "";
+    };
+    describeEditInput.oninput = function () {
+        editErrorDescribe.style.display = "none";
+        describeEditInput.style.border = "";
+    };
 }
+
 
 // chi tiet
 let choosenProject
@@ -295,11 +265,11 @@ function searchProjects(keyword) {
     listProject.innerHTML = ""; 
     let flag; 
     if (keyword === "") {
-        flag = projects;
+        flag = projects.filter(item => item.ownerId === user.id); 
     } else {
-        flag = projects.filter(function (item) {
-            return item.projectName.toLowerCase().includes(keyword.toLowerCase());
-        });
+        flag = projects.filter(item =>
+            item.ownerId === user.id && item.projectName.toLowerCase().includes(keyword.toLowerCase())
+        );
     }
     flag.forEach(function (item) {
         listProject.innerHTML += `
@@ -309,7 +279,7 @@ function searchProjects(keyword) {
                 <td class="action">
                     <button id="btn-edit" class="btn" onclick="editProject(${item.id})">Sửa</button>
                     <button id="btn-delete" class="btn" onclick="deleteProject(${item.id})">Xóa</button>
-                    <button id="btn-detail" class="btn">Chi tiết</button>
+                    <button id="btn-detail" class="btn" onclick="detailProject(${item.id})">Chi tiết</button>
                 </td>
             </tr>
         `;

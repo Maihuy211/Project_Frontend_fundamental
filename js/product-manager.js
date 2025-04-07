@@ -1,17 +1,16 @@
-let tasks = [
-    {
-        id: 1,
-        taskName: "Soạn thảo đề cương dự án",
-        assigneeId: "user1",
-        projectId: 1,
-        assignDate: "2025-03-24",
-        dueDate: "2025-03-26",
-        priority: "Thấp",
-        progress: "Đúng tiến độ",
-        status: "To do"
-    }
-];
-function createTaskRow(task, index) {
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+function save() {
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+}
+let project = JSON.parse(localStorage.getItem("choosenProject"));
+let projects = JSON.parse(localStorage.getItem("projects"));
+let titleContent = document.getElementById("title-content");
+let titleText = document.getElementById("text");
+let title = projects.findIndex((i) => i.id === project);
+titleContent.textContent = `${projects[title].projectName}`;
+titleText.textContent = `${projects[title].description}`;
+
+function createTaskRow(task) {
     let priorityClass = "";
     if (task.priority === "Thấp") {
         priorityClass = "low";
@@ -44,8 +43,8 @@ function createTaskRow(task, index) {
         </tr>
     `;
     return listTask;
-}
 
+}
 function renderTask() {
     const toDo = document.getElementById("tableListTaskToDo");
     const inProgress = document.getElementById("tableListTaskInProgress");
@@ -56,17 +55,20 @@ function renderTask() {
     pending.innerHTML = "";
     done.innerHTML = "";
     tasks.forEach((task, index) => {
-        let taskRow = createTaskRow(task, index);
-        if (task.status === "To do") {
-            toDo.innerHTML += taskRow;
-        } else if (task.status === "In Progress") {
-            inProgress.innerHTML += taskRow;
-        } else if (task.status === "Pending") {
-            pending.innerHTML += taskRow;
-        } else if (task.status === "Done") {
-            done.innerHTML += taskRow;
+        if (task.projectId === project) {
+            let taskRow = createTaskRow(task, index);
+            if (task.status === "To do") {
+                toDo.innerHTML += taskRow;
+            } else if (task.status === "In Progress") {
+                inProgress.innerHTML += taskRow;
+            } else if (task.status === "Pending") {
+                pending.innerHTML += taskRow;
+            } else if (task.status === "Done") {
+                done.innerHTML += taskRow;
+            }
         }
     });
+    save();
 }
 
 let taskName = document.getElementById("missionName");
@@ -104,44 +106,81 @@ function addMission() {
 
     let hasError = false;
 
+    // Kiểm tra tên nhiệm vụ
     if (!taskName.value.trim()) {
         errorMissionName.textContent = "Vui lòng nhập tên nhiệm vụ!";
         taskName.style.border = "1px solid red";
         hasError = true;
+    } else if (taskName.value.trim().length < 5 || taskName.value.trim().length >= 30) {
+        errorMissionName.textContent = "Tên nhiệm vụ phải từ 5 đến dưới 30 ký tự!";
+        taskName.style.border = "1px solid red";
+        hasError = true;
     }
+
+    // Kiểm tra người phụ trách
     if (!assigneeId.value || assigneeId.value === "user-charge") {
         errorAssignee.textContent = "Vui lòng chọn người phụ trách!";
         assigneeId.style.border = "1px solid red";
         hasError = true;
     }
+
+    // Kiểm tra trạng thái
     if (!status.value || status.value === "status") {
         errorStatus.textContent = "Vui lòng chọn trạng thái!";
         status.style.border = "1px solid red";
         hasError = true;
     }
+
+    // Kiểm tra ngày bắt đầu
     if (!assignDate.value) {
         errorStartDate.textContent = "Vui lòng chọn ngày bắt đầu!";
         assignDate.style.border = "1px solid red";
         hasError = true;
+    } else {
+        let todayStr = new Date().toISOString().split('T')[0];  // "YYYY-MM-DD"
+        let startStr = assignDate.value;  // cũng là "YYYY-MM-DD"
+
+        if (startStr < todayStr) {
+            errorStartDate.textContent = "Ngày bắt đầu phải từ hôm nay trở đi!";
+            assignDate.style.border = "1px solid red";
+            hasError = true;
+        }
     }
+
+    // Kiểm tra hạn cuối
     if (!dueDate.value) {
         errorEndDate.textContent = "Vui lòng chọn hạn cuối!";
         dueDate.style.border = "1px solid red";
         hasError = true;
+    } else if (assignDate.value) {
+        let start = new Date(assignDate.value);
+        let end = new Date(dueDate.value);
+
+        if (end <= start) {
+            errorEndDate.textContent = "Hạn cuối phải sau ngày bắt đầu!";
+            dueDate.style.border = "1px solid red";
+            hasError = true;
+        }
     }
+
+    // Kiểm tra độ ưu tiên
     if (!priority.value || priority.value === "choose") {
         errorPriority.textContent = "Vui lòng chọn độ ưu tiên!";
         priority.style.border = "1px solid red";
         hasError = true;
     }
+
+    // Kiểm tra tiến độ
     if (!progress.value || progress.value === "choose") {
         errorProgress.textContent = "Vui lòng chọn tiến độ!";
         progress.style.border = "1px solid red";
         hasError = true;
     }
 
-    if (hasError) return; // Dừng lại nếu có lỗi
+    if (hasError) return; // Dừng nếu có lỗi
+
     let newTask = {
+        projectId: project,
         id: tasks.length + 1,
         taskName: taskName.value,
         assigneeId: assigneeId.value,
@@ -234,7 +273,7 @@ function editMission(id) {
     endDateEdit.value = task.dueDate;
     priorityEdit.value = task.priority;
     progressEdit.value = task.progress;
-
+    console.log("Tiến độ từ task:", task.progress);
     // Reset lỗi trước khi kiểm tra
     errorMissionName.textContent = "";
     errorUserCharge.textContent = "";
@@ -264,42 +303,78 @@ function editMission(id) {
 
         let hasError = false;
 
-        if (!taskName) {
+        // Tên nhiệm vụ
+        if (!taskName.trim()) {
             errorMissionName.textContent = "Vui lòng nhập tên nhiệm vụ!";
             missionNameEditInput.style.border = "1px solid red";
             hasError = true;
+        } else if (taskName.trim().length < 5 || taskName.trim().length >= 30) {
+            errorMissionName.textContent = "Tên nhiệm vụ phải từ 5 đến dưới 30 ký tự!";
+            missionNameEditInput.style.border = "1px solid red";
+            hasError = true;
         }
-        if (!assigneeId || assigneeId==="user-charge-edit") {
+
+        // Người phụ trách
+        if (!assigneeId || assigneeId === "user-charge-edit") {
             errorUserCharge.textContent = "Vui lòng chọn người phụ trách!";
             userChargeEdit.style.border = "1px solid red";
             hasError = true;
         }
-        if (!status || status==="status-edit") {
+
+        // Trạng thái
+        if (!status || status === "status-edit") {
             errorStatus.textContent = "Vui lòng chọn trạng thái!";
             statusEdit.style.border = "1px solid red";
             hasError = true;
         }
+
+        // Ngày bắt đầu
         if (!assignDate) {
             errorStartDate.textContent = "Vui lòng chọn ngày bắt đầu!";
             startDateEdit.style.border = "1px solid red";
             hasError = true;
+        } else {
+            let todayStr = new Date().toISOString().split('T')[0];
+            let startStr = assignDate;
+
+            if (startStr < todayStr) {
+                errorStartDate.textContent = "Ngày bắt đầu phải từ hôm nay trở đi!";
+                startDateEdit.style.border = "1px solid red";
+                hasError = true;
+            }
         }
+        // Hạn cuối
         if (!dueDate) {
             errorEndDate.textContent = "Vui lòng chọn hạn cuối!";
             endDateEdit.style.border = "1px solid red";
             hasError = true;
+        } else if (assignDate) {
+            let start = new Date(assignDate);
+            let end = new Date(dueDate);
+
+            if (end <= start) {
+                errorEndDate.textContent = "Hạn cuối phải sau ngày bắt đầu!";
+                endDateEdit.style.border = "1px solid red";
+                hasError = true;
+            }
         }
-        if (!priority || priority==="priority-edit") {
+
+        // Độ ưu tiên
+        if (!priority || priority === "priority-edit") {
             errorPriority.textContent = "Vui lòng chọn độ ưu tiên!";
             priorityEdit.style.border = "1px solid red";
             hasError = true;
         }
-        if (!progress || progress==="progress-edit") {
+
+        // Tiến độ
+        if (!progress || progress === "progress-edit") {
             errorProgress.textContent = "Vui lòng chọn tiến độ!";
             progressEdit.style.border = "1px solid red";
             hasError = true;
         }
-        if (hasError) return; 
+
+        if (hasError) return; // Dừng lại nếu có lỗi
+
         task.taskName = taskName;
         task.assigneeId = assigneeId;
         task.status = status;
@@ -347,7 +422,62 @@ function deleteMission(id) {
     cancelButtondel.onclick = function () {
         missionDelete.style.display = "none";
     };
+    save();
 }
+
+
+// tìm kiếm 
+let searchInput = document.getElementById("search-Mission");
+searchInput.oninput = function () {
+    searchTasks(searchInput.value);
+};
+function searchTasks(keyword) {
+    let toDo = document.getElementById("tableListTaskToDo");
+    let inProgress = document.getElementById("tableListTaskInProgress");
+    let pending = document.getElementById("tableListTaskPending");
+    let done = document.getElementById("tableListTaskDone");
+
+    // Xóa nội dung bảng trước khi hiển thị kết quả tìm kiếm
+    toDo.innerHTML = "";
+    inProgress.innerHTML = "";
+    pending.innerHTML = "";
+    done.innerHTML = "";
+
+    let flag;
+    if (keyword === "") {
+        flag = tasks;
+    } else {
+        flag = tasks.filter(item =>
+            item.taskName.toLowerCase().includes(keyword.toLowerCase())
+        );
+    }
+    flag.forEach(function (item) {
+        let taskRow = `
+            <tr id="task-${item.id}">
+                <td class="col1">${item.taskName}</td>
+                <td class="col2">${item.assigneeId}</td>
+                <td class="col3"><span class="${item.priority === "Thấp" ? "low" : item.priority === "Trung bình" ? "medium" : "high"}">${item.priority}</span></td>
+                <td class="col4"><span class="date">${item.assignDate}</span></td>
+                <td class="col5"><span class="date">${item.dueDate}</span></td>
+                <td class="col6"><span class="${item.progress === "Có rủi ro" ? "medium" : item.progress === "Trễ hạn" ? "high" : "on-schedule"}">${item.progress}</span></td>
+                <td class="col7">
+                    <button id="btn-edit" class="btn" onclick="editMission(${item.id})">Sửa</button>
+                    <button id="btn-delete" class="btn" onclick="deleteMission(${item.id})">Xóa</button>
+                </td>
+            </tr>
+        `;
+        if (item.status === "To do") {
+            toDo.innerHTML += taskRow;
+        } else if (item.status === "In Progress") {
+            inProgress.innerHTML += taskRow;
+        } else if (item.status === "Pending") {
+            pending.innerHTML += taskRow;
+        } else if (item.status === "Done") {
+            done.innerHTML += taskRow;
+        }
+    });
+}
+
 // Chi tiết thành viên
 let btn_more = document.getElementById("more");
 let btn_save = document.getElementById("save-btn");
@@ -387,63 +517,4 @@ cancelButtonMembers.onclick = function () {
     membersAdd.style.display = "none";
 };
 addMembersButton.onclick = function () {
-
 };
-
-
-
-
-// tìm kiếm 
-let searchInput = document.getElementById("search-Mission");
-searchInput.oninput = function () {
-    searchTasks(searchInput.value);
-};
-
-function searchTasks(keyword) {
-    let toDo = document.getElementById("tableListTaskToDo");
-    let inProgress = document.getElementById("tableListTaskInProgress");
-    let pending = document.getElementById("tableListTaskPending");
-    let done = document.getElementById("tableListTaskDone");
-
-    // Xóa nội dung bảng trước khi hiển thị kết quả tìm kiếm
-    toDo.innerHTML = "";
-    inProgress.innerHTML = "";
-    pending.innerHTML = "";
-    done.innerHTML = "";
-
-    let flag;
-    if (keyword === "") {
-        flag = tasks;
-    } else {
-        flag = tasks.filter(item =>
-            item.taskName.toLowerCase().includes(keyword.toLowerCase())
-        );
-    }
-    flag.forEach(function (item) {
-        let taskRow = `
-            <tr></tr>
-                <td class="col1">${item.taskName}</td>
-                <td class="col2">${item.assigneeId}</td>
-                <td class="col3"><span class="${item.priority === "Thấp" ? "low" : item.priority === "Trung bình" ? "medium" : "high"}">${item.priority}</span></td>
-                <td class="col4"><span class="date">${item.assignDate}</span></td>
-                <td class="col5"><span class="date">${item.dueDate}</span></td>
-                <td class="col6"><span class="${item.progress === "Có rủi ro" ? "medium" : item.progress === "Trễ hạn" ? "high" : "on-schedule"}">${item.progress}</span></td>
-                <td class="col7">
-                    <button id="btn-edit" class="btn" onclick="editMission(${item.id})">Sửa</button>
-                    <button id="btn-delete" class="btn" onclick="deleteMission(${item.id})">Xóa</button>
-                </td>
-            </tr>
-        `;
-
-        if (item.status === "To do") {
-            toDo.innerHTML += taskRow;
-        } else if (item.status === "In Progress") {
-            inProgress.innerHTML += taskRow;
-        } else if (item.status === "Pending") {
-            pending.innerHTML += taskRow;
-        } else if (item.status === "Done") {
-            done.innerHTML += taskRow;
-        }
-    });
-}
-

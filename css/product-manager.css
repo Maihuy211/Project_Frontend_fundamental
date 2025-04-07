@@ -54,7 +54,7 @@ nav h3 {
     margin-top: 20px;
     margin-bottom: 20px;
 }
-.text{
+#text{
     width: 80%;
 }
 #titleName{
@@ -262,37 +262,40 @@ footer{
     border-radius: 5px;
     background-color: white;
     margin: 30px auto;
-    overflow-y: auto;
-    max-height: 500px;   
+     
 }
 #closeMenu{
     display: flex;
     flex-direction: column;
     gap:5px;
+    overflow-y: auto;
+    height: 500px;  
 }
 #close{
     width: 20px ;
     height: 20px;
+    cursor: pointer;
 }
 #missionName{
-    height: 30px;
+    padding: 5px 12px;
     border: 1px solid #DEE2E6;
     border-radius: 5px;
 }
 #closeMenu select{
-    height: 30px;
+    padding: 5px 12px;
     border: 1px solid #DEE2E6;
     border-radius: 5px;
 }
 #start-date{
-    height: 30px;
+    padding: 5px 12px;
     border: 1px solid #DEE2E6;
     border-radius: 5px;
 }
 #end-date{
-    height: 30px;
+    padding: 5px 12px;
     border: 1px solid #DEE2E6;
     border-radius: 5px;
+    
 }
 #buttonpos{
     margin-top: 20px;
@@ -317,11 +320,6 @@ footer{
 .title-addMission{
     display: flex;
     justify-content: space-between;
-}
-#error{
-    display: none;
-    color: red;
-    font-size: 12px;
 }
 #overleyRenderMembers{
     display: none;
@@ -497,35 +495,36 @@ footer{
     border-radius: 5px;
     background-color: white;
     margin: 30px auto;
-    overflow-y: auto;
-    max-height: 500px; 
+     
 }
 #closeMenu-edit{
     display: flex;
     flex-direction: column;
     gap:5px;
+    overflow-y: auto;
+    max-height: 500px;
 }
 #close-edit{
     width: 20px ;
     height: 20px;
 }
 #missionName-edit{
-    height: 30px;
+    padding: 5px 12px;
     border: 1px solid #DEE2E6;
     border-radius: 5px;
 }
 #closeMenu-edit select{
-    height: 30px;
+    padding: 5px 12px;
     border: 1px solid #DEE2E6;
     border-radius: 5px;
 }
 #start-date-edit{
-    height: 30px;
+    padding: 5px 12px;
     border: 1px solid #DEE2E6;
     border-radius: 5px;
 }
 #end-date-edit{
-    height: 30px;
+    padding: 5px 12px;
     border: 1px solid #DEE2E6;
     border-radius: 5px;
 }
@@ -542,7 +541,7 @@ footer{
     border-radius: 5px;
     padding: 5px 10px;
 }
-#buttonCance-edit{
+#buttonCancel-edit{
     color: white;
     border: none;
     border-radius: 5px;

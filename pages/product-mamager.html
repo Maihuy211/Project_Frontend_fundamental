@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chi tiết dự án</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Epilogue:ital,wght@0,100..900;1,100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Manrope:wght@200..800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Epilogue:ital,wght@0,100..900;1,100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Manrope:wght@200..800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="/css/product-manager.css">
 </head>
-<body> 
+
+<body>
     <nav>
         <h3>Quản Lí Dự Án</h3>
         <div class="link">
@@ -22,14 +26,14 @@
         </div>
     </nav>
     <div class="title-container">
-        <div class="title-addMembers">  
+        <div class="title-addMembers">
             <div class="title-text">
-                <h2>Xây dựng website thương mại điện tử</h2>
-                <p class="text">Dự án nhằm phát triển một nền tảng thương mại điện tử với các tính năng như giỏ hàng, thanh toán và quản lý sản phẩm.</p>
+                <h2 id="title-content"></h2>
+                <p id="text"></p>
             </div>
             <div class="addMembers">
                 <div class="members">
-                    <h3 id="titleName">Thành viên</h3> 
+                    <h3 id="titleName">Thành viên</h3>
                     <button id="add-member">+ Thêm thành viên</button>
                 </div>
                 <div class="user-list">
@@ -54,18 +58,18 @@
         <div class="add-search">
             <button id="addMission">+ Thêm Nhiệm vụ</button>
             <div>
-                <select name="choose" id="choose" >
-                    <option value="" selected disabled hidden>Sắp xếp theo</option>
-                    <option value="">-----</option>
-                    <option value="">-----</option>
+                <select name="choose" id="choose">
+                    <option value="choose" selected disabled hidden>Sắp xếp theo</option>
+                    <option value="Độ ưu tiên">Độ ưu tiên</option>
+                    <option value="Hạn chót">Hạn chót</option>
                 </select>
-                <input type="search" id="search-Mission" placeholder="Tìm kiếm nhiệm vụ">       
+                <input type="search" id="search-Mission" placeholder="Tìm kiếm nhiệm vụ">
             </div>
         </div>
     </div>
     <div class="container">
         <h3>Danh Sách Dự Án</h3>
-        <div class="table-container">     
+        <div class="table-container">
             <table>
                 <thead>
                     <tr>
@@ -85,7 +89,7 @@
                         <summary><strong>To do</strong></summary>
                     </tr>
                     <tbody id="tableListTaskToDo">
-                </tbody>
+                    </tbody>
                 </table>
             </details>
             <details open>
@@ -166,7 +170,6 @@
                         <option value="Cao">Cao</option>
                     </select>
                     <p id="error-priority" class="error-message"></p>
-
                     <label for="progress">Tiến độ</label>
                     <select id="progress">
                         <option value="choose" selected disabled hidden>Chọn độ tiến độ</option>
@@ -175,11 +178,11 @@
                         <option value="Trễ hạn">Trễ hạn</option>
                     </select>
                     <p id="error-progress" class="error-message"></p>
-                    <hr>
-                    <div id="buttonpos">
-                        <button id="buttonCancel">Hủy</button>
-                        <button id="buttonAdd">Lưu</button>
-                    </div>
+                    <hr> 
+                </div>
+                <div id="buttonpos">
+                    <button id="buttonCancel">Hủy</button>
+                    <button id="buttonAdd">Lưu</button>
                 </div>
             </div>
         </div>
@@ -187,14 +190,14 @@
 
     <div id="overley-del">
         <div id="missionDelete">
-            <div id="closeButton-del"> 
+            <div id="closeButton-del">
                 <div class="title">
                     <h3>Xác Nhận Xoá</h3>
                     <img src="/assets/images/Vector.png" alt="meo" id="close-del">
                 </div>
                 <hr>
                 <div id="closeMenu-del">
-                    <p>Bạn chắc chắn muốn xoá nhiệm vụ này này</p> 
+                    <p>Bạn chắc chắn muốn xoá nhiệm vụ này này</p>
                     <hr>
                     <div id="buttonpos-del">
                         <button id="buttonCancel-del">Hủy</button>
@@ -204,7 +207,7 @@
             </div>
         </div>
     </div>
-    
+
     <div id="overley-edt">
         <div id="missionEdit">
             <div class="title-addMission-edit">
@@ -212,59 +215,60 @@
                 <img src="/assets/images/Vector.png" alt="meo" id="close-edit">
             </div>
             <hr>
-            <div id="closeMenu-edit">
-                <label for="missionName-edit">Tên nhiệm vụ</label>
-                <input type="text" id="missionName-edit">
-                <p id="error-missionName-edit" class="error-message"></p>
-    
-                <label for="user-charge-edit">Người phụ trách</label>
-                <select id="user-charge-edit">
-                    <option value="user-charge-edit" selected disabled hidden>Chọn người phụ trách</option>
-                    <option value="user1">User 1</option>
-                    <option value="user2">User 2</option>
-                    <option value="user3">User 3</option>
-                    <option value="user4">User 4</option>
-                </select>
-                <p id="error-userCharge-edit" class="error-message"></p>
-    
-                <label for="status-edit">Trạng thái</label>
-                <select id="status-edit">
-                    <option value="status-edit" selected disabled hidden>Chọn trạng thái nhiệm vụ</option>
-                    <option value="To do">To do</option>
-                    <option value="In Progress">In Progress</option>
-                    <option value="Pending">Pending</option>
-                    <option value="Done">Done</option>
-                </select>
-                <p id="error-status-edit" class="error-message"></p>
-    
-                <label for="start-date-edit">Ngày bắt đầu</label>
-                <input type="date" id="start-date-edit">
-                <p id="error-startDate-edit" class="error-message"></p>
-    
-                <label for="end-date-edit">Hạn cuối</label>
-                <input type="date" id="end-date-edit">
-                <p id="error-endDate-edit" class="error-message"></p>
-    
-                <label for="priority-edit">Độ ưu tiên</label>
-                <select id="priority-edit">
-                    <option value="priority-edit" selected disabled hidden>Chọn độ ưu tiên</option>
-                    <option value="Thấp">Thấp</option>
-                    <option value="Trung bình">Trung bình</option>
-                    <option value="Cao">Cao</option>
-                </select>
-                <p id="error-priority-edit" class="error-message"></p>
-    
-                <label for="progress-edit">Tiến độ</label>
-                <select id="progress-edit">
-                    <option value="progress-edit" selected disabled hidden>Chọn tiến độ</option>
-                    <option value="Đúng tiến độ">Đúng tiến độ</option>
-                    <option value="Có rủi ro">Có rủi ro</option>
-                    <option value="Trễ hạn">Trễ hạn</option>
-                </select>
-                <p id="error-progress-edit" class="error-message"></p>
+            <div>
+                <div id="closeMenu-edit">
+                    <label for="missionName-edit">Tên nhiệm vụ</label>
+                    <input type="text" id="missionName-edit">
+                    <p id="error-missionName-edit" class="error-message"></p>
+                    <label for="user-charge-edit">Người phụ trách</label>
+                    <select id="user-charge-edit">
+                        <option value="user-charge-edit" selected disabled hidden>Chọn người phụ trách</option>
+                        <option value="user1">User 1</option>
+                        <option value="user2">User 2</option>
+                        <option value="user3">User 3</option>
+                        <option value="user4">User 4</option>
+                    </select>
+                    <p id="error-userCharge-edit" class="error-message"></p>
+
+                    <label for="status-edit">Trạng thái</label>
+                    <select id="status-edit">
+                        <option value="status-edit" selected disabled hidden>Chọn trạng thái nhiệm vụ</option>
+                        <option value="To do">To do</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Done">Done</option>
+                    </select>
+                    <p id="error-status-edit" class="error-message"></p>
+
+                    <label for="start-date-edit">Ngày bắt đầu</label>
+                    <input type="date" id="start-date-edit">
+                    <p id="error-startDate-edit" class="error-message"></p>
+
+                    <label for="end-date-edit">Hạn cuối</label>
+                    <input type="date" id="end-date-edit">
+                    <p id="error-endDate-edit" class="error-message"></p>
+
+                    <label for="priority-edit">Độ ưu tiên</label>
+                    <select id="priority-edit">
+                        <option value="priority-edit" selected disabled hidden>Chọn độ ưu tiên</option>
+                        <option value="Thấp">Thấp</option>
+                        <option value="Trung bình">Trung bình</option>
+                        <option value="Cao">Cao</option>
+                    </select>
+                    <p id="error-priority-edit" class="error-message"></p>
+
+                    <label for="progress-edit">Tiến độ</label>
+                    <select id="progress-edit">
+                        <option value="progress-edit" selected disabled hidden>Chọn tiến độ</option>
+                        <option value="Đúng tiến dộ">Đúng tiến độ</option>
+                        <option value="Có rủi ro">Có rủi ro</option>
+                        <option value="Trễ hạn">Trễ hạn</option>
+                    </select>
+                    <p id="error-progress-edit" class="error-message"></p>
+                </div>
                 <hr>
                 <div id="buttonpos-edit">
-                    <button id="buttonCance-edit">Hủy</button>
+                    <button id="buttonCancel-edit">Hủy</button>
                     <button id="buttonEdit">Lưu</button>
                 </div>
             </div>
@@ -274,7 +278,7 @@
     <div id="overleyRenderMembers">
         <div class="moreMembers">
             <div class="modal-header">
-                <h3>Thành viên</h3> 
+                <h3>Thành viên</h3>
                 <img src="/assets/images/Vector.png" alt="Đóng" id="closeMoreMembers">
             </div>
             <hr>
@@ -317,13 +321,10 @@
                 <button id="save-btn">Lưu</button>
             </div>
         </div>
-        
     </div>
-
-
     <div id="overley-addMember">
         <div id="membersAdd">
-            <div id="closeButtonMembersAdd"> 
+            <div id="closeButtonMembersAdd">
                 <div class="title">
                     <h3>Thêm thành viên</h3>
                     <img src="/assets/images/Vector.png" alt="meo" id="closeMembersAdd">
@@ -332,10 +333,10 @@
                 <div id="closeMenuMembersAdd">
                     <label for="projectName">Email</label>
                     <input type="email" id="emailMember">
-                    <p id="error"></p> 
+                    <p id="error"></p>
                     <label for="projectName">Vai Trò</label>
                     <input type="text" id="roleInput">
-                    <p id="error"></p> 
+                    <p id="error"></p>
                     <hr>
                     <div id="buttonpos">
                         <button id="buttonCancelMembersAdd">Hủy</button>
@@ -353,4 +354,5 @@
     </footer>
     <script src="/js/product-manager.js"></script>
 </body>
+
 </html>

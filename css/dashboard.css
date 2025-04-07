@@ -148,7 +148,14 @@ footer {
     border-radius: 5px;
     background-color: white;
 }
-
+#projectEdit{
+    justify-content: center;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    width: 500px;
+    padding: 15px;
+    border-radius: 5px;
+    background-color: white;
+}
 #closeMenu {
     display: flex;
     flex-direction: column;
@@ -227,14 +234,23 @@ h3 {
     color: red;
     font-size: 12px;
 }
-
+#errorDescribe{
+    display: none;
+    color: red;
+    font-size: 12px;
+}
+#editErrorDescribe{
+    display: none;
+    color: red;
+    font-size: 12px;
+}
 #editError {
     display: none;
     color: red;
     font-size: 12px;
 }
 
-#missionDelete {
+#projectDelete {
     justify-content: center;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     width: 500px;
