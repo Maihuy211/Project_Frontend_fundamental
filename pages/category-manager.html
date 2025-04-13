@@ -15,9 +15,9 @@
     <link rel="stylesheet" href="/css/category-manager.css">
 </head>
 
-<body>
+<body>s
     <nav>
-        <h3>Quản Lí Dự Án</h3>
+        <h3><a href="/pages/dashboard.html">Quản Lí Dự Án</a></h3>
         <div class="link">
             <ul>
                 <li><a href="/pages/dashboard.html">Dự án</a></li>
@@ -27,8 +27,15 @@
         </div>
     </nav>
     <div class="title-container">
-        <div class="search">
-            <input type="search" id="search-Project" placeholder="Tìm kiếm dự án">
+        <div class="sort-search">
+            <div>
+                <select name="choose" id="choose">
+                    <option value="choose" selected disabled hidden>Sắp xếp theo</option>
+                    <option value="Độ ưu tiên">Độ ưu tiên</option>
+                    <option value="Hạn chót">Hạn chót</option>
+                </select>
+                <input type="search" id="search-Mission" placeholder="Tìm kiếm nhiệm vụ">
+            </div>
         </div>
     </div>
     <div class="container">
@@ -46,100 +53,33 @@
                     </tr>
                 </thead>
             </table>
-            <details>
-                <table>
-                    <tr>
-                        <summary><strong>Xây dựng website thương mại điện tử</strong></summary>
-                    </tr>
-                    <tr>
-                        <td class="col1">Xây dựng website thương mại điện tử</td>
-                        <td class="col2">In progress <i class="fa-solid fa-pen-to-square"></i></td>
-                        <td class="col3"><span class="low">Thấp</span></td>
-                        <td class="col4"><span class="date">02 - 24</span></td>
-                        <td class="col5"><span class="date">02 - 24</span></td>
-                        <td class="col6"><span class="on-schedule">Đúng tiến độ</span></td>
-                    </tr>
-                    <tr>
-                        <td class="col1">Phát triển ứng dụng di động</td>
-                        <td class="col2">In progress <i class="fa-solid fa-pen-to-square"></i></td>
-                        <td class="col3"><span class="medium">Trung Bình</span></td>
-                        <td class="col4"><span class="date">02 - 24</span></td>
-                        <td class="col5"><span class="date">02 - 24</span></td>
-                        <td class="col6"><span class="medium">Có rủi ro</span></td>
-                    </tr>
-                    <tr>
-                        <td class="col1">Quản lý dữ liệu khách hàng</td>
-                        <td class="col2">Pending <i class="fa-solid fa-pen-to-square"></i></td>
-                        <td class="col3"><span class="high">Cao</span></td>
-                        <td class="col4"><span class="date">02 - 24</span></td>
-                        <td class="col5"><span class="date">02 - 24</span></td>
-                        <td class="col6"><span class="high">Trễ hạn</span></td>
-                    </tr>
-                </table>
-            </details>
-            <details>
-                <table>
-                    <tr>
-                        <summary><strong>Phát triển ứng dụng di động</strong></summary>
-                    </tr>
-                    <tr>
-                        <td>Soạn thảo đề cương dự án</td>
-                        <td>In progress <i class="fa-solid fa-pen-to-square"></i></td>
-                        <td><span class="low">Thấp</span></td>
-                        <td>02 - 24</td>
-                        <td>02 - 27</td>
-                        <td><span>Có rủi ro</span></td>
-                        <td>
-                            <button id="btn-edit" class="btn">Sửa</button>
-                            <button id="btn-delete" class="btn">Xoá</button>
-                        </td>
-                    </tr>
-                </table>
-            </details>
-            <details>
-                <table>
-                    <tr>
-                        <summary><strong>Quản lý dữ liệu khách hàng</strong></summary>
-                    </tr>
-                    <tr>
-                        <td>Soạn thảo đề cương dự án</td>
-                        <td>An Nguyễn</td>
-                        <td><span>Thấp</span></td>
-                        <td>02 - 24</td>
-                        <td>02 - 27</td>
-                        <td><span>Có rủi ro</span></td>
-                        <td>
-                            <button id="btn-edit" class="btn">Sửa</button>
-                            <button id="btn-delete" class="btn">Xoá</button>
-                        </td>
-                    </tr>
-                </table>
-            </details>
+            <div id="personal-mission"></div>
         </div>
     </div>
     <footer>
         <p>© 2025 Team management. All rights reserved.</p>
     </footer>
 
-    <!-- <div id="overley-del">
-        <div id="">
-            <div id="closeButton-del"> 
-                <div class="title">
+    <div id="overley-update">
+        <div id="status-update">
+            <div id="closeButton-update">
+                <div class="titleUpdate">
                     <h3>Cập nhật trạng thái</h3>
-                    <img src="/assets/images/Vector.png" alt="meo" id="close-del">
+                    <img src="/assets/images/Vector.png" alt="meo" id="close-update">
                 </div>
                 <hr>
-                <div id="closeMenu-del">
-                    <p>Xác nhận cập nhật trạng thái nhiệm vụ</p> 
+                <div id="closeMenu-update">
+                    <p>Xác nhận cập nhật trạng thái nhiệm vụ</p>
                     <hr>
-                    <div id="buttonpos-del">
-                        <button id="buttonCancel-del">Hủy</button>
-                        <button id="buttonDelete">Xác nhận</button>
+                    <div id="buttonpos-update">
+                        <button id="buttonCancel-update">Hủy</button>
+                        <button id="buttonUpdate">Xác nhận</button>
                     </div>
                 </div>
             </div>
         </div>
-    </div> -->
-
+    </div>
+    <script src="/js/category-manager.js"></script>
 </body>
+
 </html>

@@ -22,6 +22,10 @@ nav {
 nav h3 {
     font-size: 20px;
 }
+nav a{
+    text-decoration: none;
+    color: white;
+}
 .link ul {
     list-style: none;
     display: flex;
@@ -33,9 +37,11 @@ nav h3 {
     text-decoration: none;
     color: white;
 }
-.search{
+.sort-search{
+    display: flex;
     margin-top: 50px;
-    text-align: right;
+    justify-content: end;
+    gap:30px;
 }
 .title-container {
     display: flex;
@@ -44,7 +50,12 @@ nav h3 {
     gap:30px;
     width: 80%;
 }
-#search-Project {
+#choose{
+    padding: 11px;
+    border: 1px solid #DEE2E6;
+    border-radius: 5px;
+}
+#search-Mission {
     padding: 10px;
     border: 1px solid #DEE2E6;
     border-radius: 5px;
@@ -59,13 +70,15 @@ nav h3 {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    flex : 1;
+    min-height: 500px;
+    
 }
 table {
     width: 100%;
     border-collapse: collapse;
     text-align: center; 
     border: 1px solid #DFE0E1; 
+      
 }
 th, td {
     padding: 10px; 
@@ -136,3 +149,61 @@ footer{
     text-align: center;
     font-size: 16px;
 }
+#overley-update{
+    display: none;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    z-index: 1050;
+}
+#close-update {
+    width: 20px;
+    height: 20px;
+}
+#buttonUpdate {
+    background-color: #0D6EFD;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+}
+#buttonCancel-update {
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    background-color: #6C757D;
+}
+#buttonpos-update {
+    margin-top: 20px;
+    display: flex;
+    justify-content: end;
+    gap: 30px;
+}
+#status-update {
+    justify-content: center;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    width: 500px;
+    padding: 15px;
+    border-radius: 5px;
+    background-color: white;
+    margin: auto;
+    margin-top: 200px;
+}
+#close-update {
+    width: 20px;
+    height: 20px;
+}
+.titleUpdate {
+    display: flex;
+    justify-content: space-between;
+}
+h3 {
+    font-size: x-large;
+    margin-top: 0px;
+}
+

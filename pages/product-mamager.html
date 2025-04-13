@@ -16,7 +16,7 @@
 
 <body>
     <nav>
-        <h3>Quản Lí Dự Án</h3>
+        <h3><a href="/pages/dashboard.html">Quản Lí Dự Án</a></h3>
         <div class="link">
             <ul>
                 <li><a href="/pages/dashboard.html">Dự án</a></li>
@@ -36,20 +36,8 @@
                     <h3 id="titleName">Thành viên</h3>
                     <button id="add-member">+ Thêm thành viên</button>
                 </div>
-                <div class="user-list">
-                    <div class="user">
-                        <div class="avatar blue">AN</div>
-                        <div class="user-info">
-                            <div class="name">An Nguyễn</div>
-                            <div class="role">Project owner</div>
-                        </div>
-                    </div>
-                    <div class="user">
-                        <div class="avatar purple">BA</div>
-                        <div class="user-info">
-                            <div class="name">Bách Nguyễn</div>
-                            <div class="role">Frontend developer</div>
-                        </div>
+                <div id="user-list">
+                    <div id="users">
                     </div>
                     <div class="more"><img src="/assets/images/More_Horizontal.png" alt="meo" id="more"></div>
                 </div>
@@ -137,10 +125,6 @@
                     <label for="user-charge">Người phụ trách</label>
                     <select id="user-charge">
                         <option value="user-charge" selected disabled hidden>Chọn người phụ trách</option>
-                        <option value="user1">User 1</option>
-                        <option value="user2">User 2</option>
-                        <option value="user3">User 3</option>
-                        <option value="user4">User 4</option>
                     </select>
                     <p id="error-userCharge" class="error-message"></p>
 
@@ -223,10 +207,6 @@
                     <label for="user-charge-edit">Người phụ trách</label>
                     <select id="user-charge-edit">
                         <option value="user-charge-edit" selected disabled hidden>Chọn người phụ trách</option>
-                        <option value="user1">User 1</option>
-                        <option value="user2">User 2</option>
-                        <option value="user3">User 3</option>
-                        <option value="user4">User 4</option>
                     </select>
                     <p id="error-userCharge-edit" class="error-message"></p>
 
@@ -287,32 +267,8 @@
                     <div class="user-title">Thành viên</div>
                     <div class="role-title">Vai trò</div>
                 </div>
-                <div class="user">
-                    <div class="user-avatar">AN</div>
-                    <div class="user-info">
-                        <p class="user-name">An Nguyễn</p>
-                        <p class="user-email">nguyenquangan@gmail.com</p>
-                    </div>
-                    <input type="text" class="role-field">
-                    <img src="/assets/icons/Vector.png" alt="delete" id="delete-btn">
-                </div>
-                <div class="user">
-                    <div class="user-avatar">BA</div>
-                    <div class="user-info">
-                        <p class="user-name">Bách Nguyễn</p>
-                        <p class="user-email">bachnx@gmail.com</p>
-                    </div>
-                    <input type="text" class="role-field">
-                    <img src="/assets/icons/Vector.png" alt="delete" id="delete-btn">
-                </div>
-                <div class="user">
-                    <div class="user-avatar">DU</div>
-                    <div class="user-info">
-                        <p class="user-name">Dương Nguyễn</p>
-                        <p class="user-email">duongnhm@gmail.com</p>
-                    </div>
-                    <input type="text" class="role-field">
-                    <img src="/assets/icons/Vector.png" alt="delete" id="delete-btn">
+                <div id="user_list">
+                    <div class="user"></div>
                 </div>
             </div>
             <hr>
@@ -333,10 +289,10 @@
                 <div id="closeMenuMembersAdd">
                     <label for="projectName">Email</label>
                     <input type="email" id="emailMember">
-                    <p id="error"></p>
+                    <p id="errorEmail"></p>
                     <label for="projectName">Vai Trò</label>
                     <input type="text" id="roleInput">
-                    <p id="error"></p>
+                    <p id="errorRole"></p>
                     <hr>
                     <div id="buttonpos">
                         <button id="buttonCancelMembersAdd">Hủy</button>
@@ -346,9 +302,6 @@
             </div>
         </div>
     </div>
-
-
-
     <footer>
         <p>© 2025 Team management. All rights reserved.</p>
     </footer>

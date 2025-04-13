@@ -64,11 +64,20 @@ document.getElementById("btn").onclick = function() {
         id: users.length + 1,
         name: nameValue,
         email: emailValue,
-        password: passValue
+        password: passValue,
     };
 
     users.push(newUser);
     localStorage.setItem("users", JSON.stringify(users));
     localStorage.setItem("loggedInUser", JSON.stringify(newUser));
-    window.location.href = "dashboard.html";
+    Swal.fire({
+        icon: "success",
+        title: "Đăng kí thành công",
+        showConfirmButton: false,
+        timer: 1500
+      });
+      setTimeout(()=>{
+        window.location.href = "dashboard.html";
+    },1500)
+    
 };

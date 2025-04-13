@@ -24,6 +24,10 @@ nav {
 nav h3 {
     font-size: 20px;
 }
+nav a{
+    text-decoration: none;
+    color: white;
+}
 .link ul {
     list-style: none;
     display: flex;
@@ -46,12 +50,20 @@ nav h3 {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap:50px;
+}
+.title-text{
+    width: 800px;
+}
+.addMembers{
+    width: 400px;
 }
 .members{
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-top: 20px;
+    gap: 30px;
     margin-bottom: 20px;
 }
 #text{
@@ -63,36 +75,24 @@ nav h3 {
 h3{
     border-top: 10px;
 }
-.user-list {
+#user-list {
+    justify-content:end;
     display: flex;
     align-items: center;
-    gap: 20px;
 }
-.user {
+#users {
     display: flex;
     align-items: center;
     gap: 10px;
 }
-.avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 14px;
-}
-.blue { 
-    background-color: #0D6EFD;
-    ; 
-}
-.purple { 
-    background-color:  #8A2BE2; 
+#users #avatar {
+    width: 50px;
+    border-radius: 100%;
 }
 .user-info {
     display: flex;
     flex-direction: column;
+    width: 100px;
 }
 .role {
     font-size: 14px; 
@@ -106,6 +106,8 @@ h3{
     background-color: #E2E3E5;
     border-radius: 100%;
     padding: 10px;
+
+    right: 0;
 }
 #add-member {
     padding: 10px 20px;
@@ -150,7 +152,6 @@ h3{
     display: flex;
     flex-direction: column;
     gap: 20px;
-    flex: 1;
 }
 table {
     width: 100%;
@@ -379,26 +380,21 @@ footer{
     font-weight: bold;
     margin-bottom: 8px;
 }
-.user {
+#user_list {  
+    display: flex;
+    flex-direction: column;
+}
+.user{
     display: flex;
     align-items: center;
     margin-bottom: 12px;
     padding: 8px;
     border-radius: 6px;
+    gap: 10px;
 }
-.user-avatar {
-    flex: 0 0 40px;
-    height: 40px;
-    width: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    color: #FFFFFF;
-    margin-right: 12px;
-    background-color: #0D6EFD;
-
+.user .avatar{
+    width: 50px;
+    border-radius: 100%;
 }
 .user-info {
     flex: 2;
@@ -612,6 +608,14 @@ footer{
     justify-content: space-between;
 }
 .error-message {
+    color: red;
+    font-size: 12px;
+}
+#errorEmail{
+    color: red;
+    font-size: 12px;
+}
+#errorRole{
     color: red;
     font-size: 12px;
 }

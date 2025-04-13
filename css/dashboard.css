@@ -5,14 +5,12 @@
     font-family: Roboto;
 
 }
-
 body {
     background-color: #F8F9FA;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-
 nav {
     background-color: #212529;
     color: white;
@@ -21,11 +19,13 @@ nav {
     justify-content: space-around;
     width: 100%;
 }
-
 nav h3 {
     font-size: 20px;
 }
-
+nav a{
+    text-decoration: none;
+    color: white;
+}
 .link ul {
     list-style: none;
     display: flex;
@@ -50,7 +50,7 @@ nav h3 {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    flex: 1;
+    height: 530px;
 }
 
 .title-container {
@@ -128,9 +128,12 @@ th {
 
 .action {
     width: 200px;
-    text-align: center;
+    text-align: center ;
 }
-
+/* .container-pagination{
+    margin-top: 120px !important;
+    position: sticky !important;
+} */
 footer {
     width: 100%;
     background-color: #212529;
@@ -167,7 +170,15 @@ footer {
     border: 1px solid #DEE2E6;
     border-radius: 5px;
 }
-
+#projectNameEdit{
+    height: 30px;
+    border: 1px solid #DEE2E6;
+    border-radius: 5px;
+}
+#describeEdit{
+    height: 80px;
+    border: 1px solid #DEE2E6;
+}
 #describe {
     height: 80px;
     border: 1px solid #DEE2E6;
@@ -291,7 +302,6 @@ h3 {
 
 #buttonDelete {
     background-color: #DC3545;
-    ;
     color: white;
     border: none;
     border-radius: 5px;
@@ -309,6 +319,7 @@ h3 {
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(5px);
+    z-index: 1050;
 }
 
 #overley-del {
@@ -322,6 +333,7 @@ h3 {
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(5px);
+    z-index: 1050;
 }
 
 #overley-edit {
@@ -335,6 +347,7 @@ h3 {
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(5px);
+    z-index: 1050;
 }
 
 #close-del {
@@ -346,5 +359,3 @@ h3 {
     display: flex;
     justify-content: space-between;
 }
-
-;

@@ -1,4 +1,5 @@
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+const user = JSON.parse(localStorage.getItem("loggedInUser"));
 function save() {
     localStorage.setItem('tasks', JSON.stringify(tasks));
 }
@@ -27,7 +28,7 @@ function createTaskRow(task) {
         progressClass = "high";
     } else {
         progressClass = "on-schedule";
-    }
+    }   
     let listTask = `
         <tr id="task-${task.id}">
             <td class="col1">${task.taskName}</td>
@@ -50,27 +51,47 @@ function renderTask() {
     const inProgress = document.getElementById("tableListTaskInProgress");
     const pending = document.getElementById("tableListTaskPending");
     const done = document.getElementById("tableListTaskDone");
-    toDo.innerHTML = "";
-    inProgress.innerHTML = "";
-    pending.innerHTML = "";
-    done.innerHTML = "";
-    tasks.forEach((task, index) => {
-        if (task.projectId === project) {
-            let taskRow = createTaskRow(task, index);
+    let tasksToDo = "";
+    let tasksInProgress = "";
+    let tasksPending = "";
+    let tasksDone = "";
+    const projectTasks = tasks.filter(task => task.projectId === project && task.ownerId === user.id);
+    if (projectTasks.length > 0) {
+        projectTasks.forEach(task => {
+            const row = createTaskRow(task);
             if (task.status === "To do") {
-                toDo.innerHTML += taskRow;
+                tasksToDo += row;
             } else if (task.status === "In Progress") {
-                inProgress.innerHTML += taskRow;
+                tasksInProgress += row;
             } else if (task.status === "Pending") {
-                pending.innerHTML += taskRow;
+                tasksPending += row;
             } else if (task.status === "Done") {
-                done.innerHTML += taskRow;
+                tasksDone += row;
             }
-        }
-    });
+        });
+    }
+    if (tasksToDo !== "") {
+        toDo.innerHTML = tasksToDo;
+    } else {
+        toDo.innerHTML = `<tr><td colspan="7" style="text-align:center">Chưa có nhiệm vụ nào</td></tr>`;
+    }
+    if (tasksInProgress !== "") {
+        inProgress.innerHTML = tasksInProgress;
+    } else {
+        inProgress.innerHTML = `<tr><td colspan="7" style="text-align:center">Chưa có nhiệm vụ nào</td></tr>`;
+    }
+    if (tasksPending !== "") {
+        pending.innerHTML = tasksPending;
+    } else {
+        pending.innerHTML = `<tr><td colspan="7" style="text-align:center">Chưa có nhiệm vụ nào</td></tr>`;
+    }
+    if (tasksDone !== "") {
+        done.innerHTML = tasksDone;
+    } else {
+        done.innerHTML = `<tr><td colspan="7" style="text-align:center">Chưa có nhiệm vụ nào</td></tr>`;
+    }
     save();
 }
-
 let taskName = document.getElementById("missionName");
 let assigneeId = document.getElementById("user-charge");
 let status = document.getElementById("status");
@@ -137,8 +158,8 @@ function addMission() {
         assignDate.style.border = "1px solid red";
         hasError = true;
     } else {
-        let todayStr = new Date().toISOString().split('T')[0];  // "YYYY-MM-DD"
-        let startStr = assignDate.value;  // cũng là "YYYY-MM-DD"
+        let todayStr = new Date().toISOString().split('T')[0];
+        let startStr = assignDate.value;
 
         if (startStr < todayStr) {
             errorStartDate.textContent = "Ngày bắt đầu phải từ hôm nay trở đi!";
@@ -188,7 +209,8 @@ function addMission() {
         assignDate: assignDate.value,
         dueDate: dueDate.value,
         priority: priority.value,
-        progress: progress.value
+        progress: progress.value,
+        ownerId: user.id,
     };
 
     tasks.push(newTask);
@@ -436,13 +458,10 @@ function searchTasks(keyword) {
     let inProgress = document.getElementById("tableListTaskInProgress");
     let pending = document.getElementById("tableListTaskPending");
     let done = document.getElementById("tableListTaskDone");
-
-    // Xóa nội dung bảng trước khi hiển thị kết quả tìm kiếm
     toDo.innerHTML = "";
     inProgress.innerHTML = "";
     pending.innerHTML = "";
     done.innerHTML = "";
-
     let flag;
     if (keyword === "") {
         flag = tasks;
@@ -477,44 +496,306 @@ function searchTasks(keyword) {
         }
     });
 }
+// Lấy dữ liệu người dùng và project
+const listProject = JSON.parse(localStorage.getItem("projects")) || [];
+const projectId = JSON.parse(localStorage.getItem("choosenProject"));
+const currentProject = listProject.find(item => item.id === projectId);
 
-// Chi tiết thành viên
-let btn_more = document.getElementById("more");
-let btn_save = document.getElementById("save-btn");
-let closeMore = document.getElementById("closeMoreMembers");
-let btn_cancel = document.getElementById("cancel-btn");
-let listMembers = document.getElementById("overleyRenderMembers");
-btn_more.onclick = function () {
-    listMembers.style.display = "flex";
-};
-btn_cancel.onclick = function () {
-    listMembers.style.display = "none";
-};
-closeMore.onclick = function () {
-    listMembers.style.display = "none";
-};
-btn_save.onclick = function () {
-};
+let originalMemberList = []; // Danh sách gốc để reset khi hủy
+let fullMemberList = [];     // Danh sách hiển thị
+let deletedMemberIds = [];   // Danh sách ID bị đánh dấu xóa
 
+function initializeFullMemberList() {
+    const user = JSON.parse(localStorage.getItem("loggedInUser"));
+    const listProject = JSON.parse(localStorage.getItem("projects")) || [];
+    const projectId = JSON.parse(localStorage.getItem("choosenProject"));
+    const currentProject = listProject.find(item => item.id === projectId);
+  
+    originalMemberList = [];
+    if (user) {
+      originalMemberList.push({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        password: user.password,
+        role: "Project owner"
+      });
+    }
+    (currentProject.members || []).forEach(member => {
+      originalMemberList.push({
+        id: member.id,
+        name: member.name,
+        email: member.email,
+        role: member.role
+      });
+    });
+    fullMemberList = JSON.parse(JSON.stringify(originalMemberList));
+    deletedMemberIds = [];
+  }
+initializeFullMemberList();
+renderUser(fullMemberList);
+userList(fullMemberList);
+renderChargeDropdown();
+renderChargeDropdownEdit();
 
-// thêm thành viên
+function renderUser(memberList) {
+  let renderUser = document.getElementById("users");
+  renderUser.innerHTML = "";
+  const visibleMembers = memberList.filter(member => !deletedMemberIds.includes(member.id));
+  for (let i = 0; i < visibleMembers.length && i < 2; i++) {
+    const member = visibleMembers[i];
+    renderUser.innerHTML += `
+      <img src="/assets/images/avatar-trang-4.jpg" alt="meo" id="avatar">
+      <div class="user-info">
+        <div class="name">${member.name}</div>
+        <div class="role">${member.role}</div>
+      </div>
+    `;
+  }
+}
+
+function userList(memberList) {
+  let listUser = document.getElementById("user_list");
+  listUser.innerHTML = "";
+  const visibleMembers = memberList.filter(member => !deletedMemberIds.includes(member.id));
+  visibleMembers.forEach((member) => {
+    listUser.innerHTML += `
+      <div class="user">
+        <img src="/assets/images/avatar-trang-4.jpg" alt="meo" class="avatar">
+        <div class="user-info">
+          <p class="user-name">${member.name}</p>
+          <p class="user-email">${member.email}</p>
+        </div>
+        <input type="text" class="role-field" value="${member.role}" ${member.role === "Project owner" ? "disabled" : ""}>
+        <img src="/assets/icons/Vector.png" alt="delete" class="delete-btn" onclick="deleteUser(${member.id})">
+      </div>
+    `;
+  });
+}
+
+function renderChargeDropdown() {
+  const dropdown = document.getElementById("user-charge");
+  if (!dropdown) return;
+  dropdown.innerHTML = '<option value="user-charge" selected disabled hidden>Chọn người phụ trách</option>';
+  const visibleMembers = fullMemberList.filter(member => !deletedMemberIds.includes(member.id));
+  visibleMembers.forEach(member => {
+    dropdown.innerHTML += `<option value="${member.name}">${member.name}</option>`;
+  });
+}
+
+function renderChargeDropdownEdit() {
+  const dropdown = document.getElementById("user-charge-edit");
+  if (!dropdown) return;
+  dropdown.innerHTML = '<option value="user-charge-edit" selected disabled hidden>Chọn người phụ trách</option>';
+  const visibleMembers = fullMemberList.filter(member => !deletedMemberIds.includes(member.id));
+  visibleMembers.forEach(member => {
+    dropdown.innerHTML += `<option value="${member.name}">${member.name}</option>`;
+  });
+}
+
 let add_member = document.getElementById("add-member");
 let addMembersButton = document.getElementById("buttonAddMembers");
 let closeButtonMembers = document.getElementById("closeMembersAdd");
 let cancelButtonMembers = document.getElementById("buttonCancelMembersAdd");
 let membersAdd = document.getElementById("overley-addMember");
-let error = document.getElementById("error");
+let errorEmail = document.getElementById("errorEmail");
+let errorRole = document.getElementById("errorRole");
+let emailInput = document.getElementById("emailMember");
+let roleInput = document.getElementById("roleInput");
+add_member.onclick = () => {
+  errorEmail.style.display = "none";
+  errorRole.style.display = "none";
+  emailInput.style.border = "";
+  roleInput.style.border = "";
+  membersAdd.style.display = "flex";
+};
+closeButtonMembers.onclick = () => membersAdd.style.display = "none";
+cancelButtonMembers.onclick = () => membersAdd.style.display = "none";
 
-add_member.onclick = function () {
-    error.style.display = "none";
-    membersAdd.style.display = "flex";
-
-};
-closeButtonMembers.onclick = function () {
-    membersAdd.style.display = "none";
-};
-cancelButtonMembers.onclick = function () {
-    membersAdd.style.display = "none";
-};
 addMembersButton.onclick = function () {
+    let emailInput = document.getElementById("emailMember");
+    let roleInput = document.getElementById("roleInput");
+    let emailValue = emailInput.value.trim();
+    let roleValue = roleInput.value.trim();
+    
+    errorEmail.style.display = "none";
+    errorRole.style.display = "none";
+    emailInput.style.border = "";
+    roleInput.style.border = "";
+    
+    let hasError = false;
+    if (emailValue === "") {
+      errorEmail.textContent = "Vui lòng nhập email";
+      errorEmail.style.display = "block";
+      emailInput.style.border = "1px solid red";
+      hasError = true;
+    } 
+    else if (!emailValue.includes("@") || !(emailValue.endsWith(".com") || emailValue.endsWith(".vn"))) {
+      errorEmail.textContent = "Email không hợp lệ";
+      errorEmail.style.display = "block";
+      emailInput.style.border = "1px solid red";
+      hasError = true;
+    } 
+    else if (emailValue.length < 5 || emailValue.length > 50) {
+      errorEmail.textContent = "Email phải có độ dài từ 5 đến 50 ký tự";
+      errorEmail.style.display = "block";
+      emailInput.style.border = "1px solid red";
+      hasError = true;
+    }
+    if (roleValue === "") {
+      errorRole.textContent = "Vui lòng nhập vai trò";
+      errorRole.style.display = "block";
+      roleInput.style.border = "1px solid red";
+      hasError = true;
+    } 
+    else if (roleValue.length < 5 || roleValue.length > 50) {
+      errorRole.textContent = "Vai trò phải có độ dài từ 5 đến 50 ký tự";
+      errorRole.style.display = "block";
+      roleInput.style.border = "1px solid red";
+      hasError = true;
+    }
+    if (hasError) return;
+    
+  const newMember = {
+    id: Math.floor(Math.random() * 1000),
+    name: emailValue.split("@")[0],
+    email: emailValue,
+    role: roleValue
+  };
+
+  fullMemberList.push(newMember);
+  originalMemberList.push(newMember);
+  userList(fullMemberList);
+  renderUser(fullMemberList);
+  renderChargeDropdown();
+  renderChargeDropdownEdit();
+  saveUser();
+  document.getElementById("emailMember").value = "";
+  document.getElementById("roleInput").value = "";
+  membersAdd.style.display = "none";
 };
+
+function deleteUser(id) {
+  if (!deletedMemberIds.includes(id)) {
+    deletedMemberIds.push(id);
+  }
+  userList(fullMemberList);
+  renderChargeDropdown();
+  renderChargeDropdownEdit();
+  saveUser();
+}
+
+function saveUser() {
+  const index = listProject.findIndex(item => item.id === currentProject.id);
+  currentProject.members = fullMemberList.filter(
+    member => member.role !== "Project owner" && !deletedMemberIds.includes(member.id)
+  );
+  listProject[index] = currentProject;
+  localStorage.setItem("projects", JSON.stringify(listProject));
+}
+
+let btn_more = document.getElementById("more");
+let btn_save = document.getElementById("save-btn");
+let closeMore = document.getElementById("closeMoreMembers");
+let btn_cancel = document.getElementById("cancel-btn");
+let listMembers = document.getElementById("overleyRenderMembers");
+
+btn_more.onclick = () => {
+  fullMemberList = JSON.parse(JSON.stringify(originalMemberList));
+  deletedMemberIds = [];
+  renderUser(fullMemberList);
+  userList(fullMemberList);
+  renderChargeDropdown();
+  renderChargeDropdownEdit();
+  listMembers.style.display = "flex";
+};
+
+btn_cancel.onclick = () => {
+  listMembers.style.display = "none";
+};
+
+closeMore.onclick = btn_cancel.onclick;
+
+btn_save.onclick = () => {
+  const roleInputs = document.querySelectorAll(".role-field");
+  let visibleIndex = 0;
+
+  fullMemberList.forEach(member => {
+    if (deletedMemberIds.includes(member.id)) return;
+    if (member.role !== "Project owner") {
+      member.role = roleInputs[visibleIndex].value.trim();
+    }
+    visibleIndex++;
+    saveUser();
+  });
+
+  fullMemberList = fullMemberList.filter(member => !deletedMemberIds.includes(member.id));
+  saveUser();
+  deletedMemberIds = [];
+  originalMemberList = JSON.parse(JSON.stringify(fullMemberList));
+
+  renderUser(fullMemberList);
+  userList(fullMemberList);
+  renderChargeDropdown();
+  renderChargeDropdownEdit();
+  listMembers.style.display = "none";
+};
+document.getElementById("choose").onchange = displayTasks;
+
+function sortTasks(taskList, sortBy) {
+    let sortedTasks = [];
+
+    taskList.forEach(task => {
+        let copiedTask = {
+            id: task.id,
+            taskName: task.taskName,
+            assigneeId: task.assigneeId,
+            priority: task.priority,
+            assignDate: task.assignDate,
+            dueDate: task.dueDate,
+            progress: task.progress,
+            status: task.status,
+            projectId: task.projectId
+        };
+        sortedTasks.push(copiedTask);
+    });
+
+    if (sortBy === "Độ ưu tiên") {
+        const priorityOrder = { "Cao": 3, "Trung bình": 2, "Thấp": 1 };
+        sortedTasks.sort((a, b) => priorityOrder[b.priority] - priorityOrder[a.priority]);
+    } else if (sortBy === "Hạn chót") {
+        sortedTasks.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+    }
+
+    return sortedTasks;
+}
+
+function displayTasks() {
+    const toDo = document.getElementById("tableListTaskToDo");
+    const inProgress = document.getElementById("tableListTaskInProgress");
+    const pending = document.getElementById("tableListTaskPending");
+    const done = document.getElementById("tableListTaskDone");
+
+    toDo.innerHTML = "";
+    inProgress.innerHTML = "";
+    pending.innerHTML = "";
+    done.innerHTML = "";
+
+    let sortBy = document.getElementById("choose").value;
+    let filteredTasks = tasks.filter(task => task.projectId === project);
+
+    let sortedTasks = sortTasks(filteredTasks, sortBy);
+
+    sortedTasks.forEach((task) => {
+        let taskRow = createTaskRow(task);
+        if (task.status === "To do") {
+            toDo.innerHTML += taskRow;
+        } else if (task.status === "In Progress") {
+            inProgress.innerHTML += taskRow;
+        } else if (task.status === "Pending") {
+            pending.innerHTML += taskRow;
+        } else if (task.status === "Done") {
+            done.innerHTML += taskRow;
+        }
+    });
+}

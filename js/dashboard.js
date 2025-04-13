@@ -2,24 +2,29 @@ const user = JSON.parse(localStorage.getItem("loggedInUser"));
 if (!user) {
     window.location.href = "/pages/login.html";
 }
+
 const projects = JSON.parse(localStorage.getItem("projects")) || [];
 function save() {
     localStorage.setItem('projects', JSON.stringify(projects));
 }
 let currentPage = 1;
 const rowsPerPage = 4;
+function filter(text) {
+    return text.replace(/[^a-zA-ZÀ-ỹ\s]/g, "");
+}
 function renderProject() {
     let listProject = document.getElementById("projects");
     listProject.innerHTML = "";
-    const userProjects = projects.filter(item => item.ownerId === user.id);
+    let userProjects = projects.filter(project => Number(project.ownerId) === user.id);
     const start = (currentPage - 1) * rowsPerPage;
     const paginatedItems = userProjects.slice(start, start + rowsPerPage);
-    
+
     paginatedItems.forEach(item => {
+        let cleanName = filter(item.projectName);
         listProject.innerHTML += `
             <tr>
                 <td class="table-id">${item.id}</td>
-                <td>${item.projectName}</td>
+                <td>${cleanName}</td>
                 <td class="action">
                     <button id="btn-edit" class="btn" onclick="editProject(${item.id})">Sửa</button>
                     <button id="btn-delete" class="btn" onclick="deleteProject(${item.id})">Xóa</button>
@@ -34,37 +39,47 @@ function renderProject() {
 function renderPagination() {
     let pagination = document.querySelector(".pagination");
     pagination.innerHTML = "";
-    const userProjects = projects.filter(item => item.ownerId === user.id); 
-    const totalPages = Math.ceil(userProjects.length / rowsPerPage); 
-    
-    pagination.innerHTML += `<li class="page-item"><a class="page-link" href="#" onclick="previousPage()"><</a></li>`;
-    
+    const userProjects = projects.filter(item => item.ownerId === user.id);
+    const totalPages = Math.ceil(userProjects.length / rowsPerPage);
+    pagination.innerHTML += `
+        <li class="page-item">
+            <a class="page-link" href="#" onclick="previousPage()"><</a>
+        </li>`;
     for (let i = 1; i <= totalPages; i++) {
-        pagination.innerHTML += `<li class="page-item"><a class="page-link" href="#" onclick="goToPage(${i})">${i}</a></li>`;
+        pagination.innerHTML += `
+            <li class="page-item ${currentPage === i ? 'active' : ''}">
+                <a class="page-link" href="#" onclick="goToPage(${i})">${i}</a>
+            </li>`;
     }
-    
-    pagination.innerHTML += `<li class="page-item"><a class="page-link" href="#" onclick="nextPage(${totalPages})">></a></li>`;
+    pagination.innerHTML += `
+        <li class="page-item">
+            <a class="page-link" href="#" onclick="nextPage(${totalPages})">></a>
+        </li>`;
 }
+
 function previousPage() {
     if (currentPage > 1) {
         currentPage--;
         renderProject();
     }
 }
+
 function nextPage(totalPages) {
     if (currentPage < totalPages) {
         currentPage++;
         renderProject();
     }
 }
+
 function goToPage(page) {
     currentPage = page;
     renderProject();
 }
+
 renderProject();
 // Thêm dự án
 let addButton = document.getElementById("addProject");
-let addProjectButton = document.getElementById("buttonAdd"); // sửa từ 'addProjcetButton'
+let addProjectButton = document.getElementById("buttonAdd");
 let closeButton = document.getElementById("close");
 let cancelButton = document.getElementById("buttonCancel");
 let projectAdd = document.getElementById("overley-add");
@@ -77,10 +92,10 @@ addButton.onclick = function () {
     projectNameInput.value = "";
     describeInput.value = "";
     error.style.display = "none";
-    errorDescribe.style.display = "none"; 
+    errorDescribe.style.display = "none";
     projectAdd.style.display = "flex";
-    projectNameInput.style.border = "";   
-    describeInput.style.border = "";      
+    projectNameInput.style.border = "";
+    describeInput.style.border = "";
 };
 
 closeButton.onclick = function () {
@@ -94,13 +109,18 @@ cancelButton.onclick = function () {
 addProjectButton.onclick = function () {
     addProject();
 };
-
+// thêm dự án 
 function addProject() {
     let hasError = false;
     let inputValue = projectNameInput.value.trim();
-    let describeValue = describeInput.value.trim(); 
+    let describeValue = describeInput.value.trim();
     if (inputValue === "") {
         error.textContent = "Tên dự án trống";
+        error.style.display = "block";
+        projectNameInput.style.border = "1px solid red";
+        hasError = true;
+    } else if (inputValue.trim().length < 5 || inputValue.trim().length >= 50) {
+        error.textContent = "Tên dự án phải từ 5 đến dưới 50 ký tự!";
         error.style.display = "block";
         projectNameInput.style.border = "1px solid red";
         hasError = true;
@@ -108,6 +128,11 @@ function addProject() {
     if (describeValue === "") {
         errorDescribe.textContent = "Tên mô tả trống";
         errorDescribe.style.display = "flex";
+        describeInput.style.border = "1px solid red";
+        hasError = true;
+    } else if (describeValue.trim().length < 5 || describeValue.trim().length >= 1000) {
+        errorDescribe.textContent = "Tên mô tả phải từ 5 đến dưới 1000 ký tự!";
+        errorDescribe.style.display = "block";
         describeInput.style.border = "1px solid red";
         hasError = true;
     }
@@ -132,17 +157,17 @@ function addProject() {
     let newProject = {
         id: id,
         projectName: inputValue,
-        description : describeValue,
+        description: describeValue,
         members: [],
         ownerId: user.id
     };
     projects.push(newProject);
+    save();
     projectNameInput.value = "";
     describeInput.value = "";
     errorDescribe.style.display = "none";
     error.style.display = "none";
     projectAdd.style.display = "none";
-    save();
     renderProject();
 }
 
@@ -150,7 +175,6 @@ renderProject();
 // Xóa dự án 
 
 function deleteProject(id) {
-
     let delProjectButton = document.getElementById("buttonDelete");
     let closeButtondel = document.getElementById("close-del");
     let cancelButtondel = document.getElementById("buttonCancel-del");
@@ -160,13 +184,12 @@ function deleteProject(id) {
     delProjectButton.onclick = function () {
         const index = projects.findIndex((task) => task.id === id);
         if (index !== -1) {
-            projects.splice(index, 1); 
+            projects.splice(index, 1);
         }
         save();
-        renderProject(); 
-        projectDelete.style.display = "none"; 
+        renderProject();
+        projectDelete.style.display = "none";
     };
-
     closeButtondel.onclick = function () {
         projectDelete.style.display = "none";
     };
@@ -175,13 +198,14 @@ function deleteProject(id) {
         projectDelete.style.display = "none";
     };
 }
+
 // sửa dự án 
 function editProject(id) {
     let projectEdit = document.getElementById("overley-edit");
     let projectNameEditInput = document.getElementById("projectNameEdit");
     let describeEditInput = document.getElementById("describeEdit"); // Lấy phần mô tả
     let editError = document.getElementById("editError");
-    let editErrorDescribe = document.getElementById("editErrorDescribe"); 
+    let editErrorDescribe = document.getElementById("editErrorDescribe");
 
     let project = projects.find((task) => task.id === id);
     projectNameEditInput.value = project.projectName;
@@ -200,16 +224,25 @@ function editProject(id) {
         if (inputValue === "") {
             editError.textContent = "Tên dự án trống";
             editError.style.display = "block";
-            projectNameEditInput.style.border = "1px solid red"; 
-            hasError=true; 
+            projectNameEditInput.style.border = "1px solid red";
+            hasError = true;
+        } else if (inputValue.trim().length < 5 || inputValue.trim().length >= 50) {
+            editError.textContent = "Tên dự án phải từ 5 đến dưới 50 ký tự!";
+            editError.style.display = "block";
+            projectNameEditInput.style.border = "1px solid red";
+            hasError = true;
         }
-
         if (describeValue === "") {
             editErrorDescribe.textContent = "Mô tả dự án trống";
             editErrorDescribe.style.display = "block";
             describeEditInput.style.border = "1px solid red";
-            hasError=true; 
-        } 
+            hasError = true;
+        } else if (describeValue.trim().length < 5 || describeValue.trim().length >= 1000) {
+            editErrorDescribe.textContent = "Tên mô tả phải từ 5 đến dưới 1000 ký tự!";
+            editErrorDescribe.style.display = "block";
+            describeEditInput.style.border = "1px solid red";
+            hasError = true;
+        }
         if (hasError) return;
         let check = false;
         for (let i = 0; i < projects.length; i++) {
@@ -250,22 +283,26 @@ function editProject(id) {
 
 // chi tiet
 let choosenProject
-function detailProject(id){
+function detailProject(id) {
     choosenProject = Number(id);
-    localStorage.setItem("choosenProject",JSON.stringify(choosenProject));
+    localStorage.setItem("choosenProject", JSON.stringify(choosenProject));
     window.location.href = "product-mamager.html";
 }
 // tìm kiếm 
 let searchInput = document.getElementById("search-Project");
-searchInput.oninput = function () {
-    searchProjects(searchInput.value);
+searchInput.onkeydown = function (item) {
+    if (item.key === "Enter") {
+        searchProjects(searchInput.value);
+        return; 
+    }
 };
 function searchProjects(keyword) {
     let listProject = document.getElementById("projects");
-    listProject.innerHTML = ""; 
-    let flag; 
+    listProject.innerHTML = "";
+    let flag;
     if (keyword === "") {
-        flag = projects.filter(item => item.ownerId === user.id); 
+        renderProject();
+        return; // 
     } else {
         flag = projects.filter(item =>
             item.ownerId === user.id && item.projectName.toLowerCase().includes(keyword.toLowerCase())
