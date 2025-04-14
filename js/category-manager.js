@@ -38,7 +38,6 @@ function createTaskRow(task) {
         </tr>
     `;
 }
-
 function sortTasks(taskList, sortBy) {
     let sortedTasks = [];
     taskList.forEach(task => {

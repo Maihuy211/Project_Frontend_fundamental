@@ -30,7 +30,7 @@ function createTaskRow(task) {
         progressClass = "high";
     } else {
         progressClass = "on-schedule";
-    }   
+    }
     let listTask = `
         <tr id="task-${task.id}">
             <td class="col1">${task.taskName}</td>
@@ -110,7 +110,7 @@ let errorEndDate = document.getElementById("error-endDate");
 let errorPriority = document.getElementById("error-priority");
 let errorProgress = document.getElementById("error-progress");
 function addMission() {
-    
+
     errorMissionName.textContent = "";
     errorAssignee.textContent = "";
     errorStatus.textContent = "";
@@ -139,7 +139,18 @@ function addMission() {
         taskName.style.border = "1px solid red";
         hasError = true;
     }
-
+    let userTasks = tasks.filter(task =>
+        task.ownerId === user.id &&
+        task.projectId === project
+    );
+    let isDuplicate = userTasks.some(task =>
+        task.taskName.toLowerCase() === taskName.value.trim().toLowerCase()
+    );
+    if (isDuplicate) {
+        errorMissionName.textContent = "Tên nhiệm vụ đã tồn tại!";
+        taskName.style.border = "1px solid red";
+        return;
+    }
     // Kiểm tra người phụ trách
     if (!assigneeId.value || assigneeId.value === "user-charge") {
         errorAssignee.textContent = "Vui lòng chọn người phụ trách!";
@@ -169,7 +180,6 @@ function addMission() {
             hasError = true;
         }
     }
-
     // Kiểm tra hạn cuối
     if (!dueDate.value) {
         errorEndDate.textContent = "Vui lòng chọn hạn cuối!";
@@ -512,28 +522,28 @@ function initializeFullMemberList() {
     const listProject = JSON.parse(localStorage.getItem("projects")) || [];
     const projectId = JSON.parse(localStorage.getItem("choosenProject"));
     const currentProject = listProject.find(item => item.id === projectId);
-  
+
     originalMemberList = [];
     if (user) {
-      originalMemberList.push({
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        password: user.password,
-        role: "Project owner"
-      });
+        originalMemberList.push({
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            password: user.password,
+            role: "Project owner"
+        });
     }
     (currentProject.members || []).forEach(member => {
-      originalMemberList.push({
-        id: member.id,
-        name: member.name,
-        email: member.email,
-        role: member.role
-      });
+        originalMemberList.push({
+            id: member.id,
+            name: member.name,
+            email: member.email,
+            role: member.role
+        });
     });
     fullMemberList = JSON.parse(JSON.stringify(originalMemberList));
     deletedMemberIds = [];
-  }
+}
 initializeFullMemberList();
 renderUser(fullMemberList);
 userList(fullMemberList);
@@ -541,27 +551,27 @@ renderChargeDropdown();
 renderChargeDropdownEdit();
 
 function renderUser(memberList) {
-  let renderUser = document.getElementById("users");
-  renderUser.innerHTML = "";
-  const visibleMembers = memberList.filter(member => !deletedMemberIds.includes(member.id));
-  for (let i = 0; i < visibleMembers.length && i < 2; i++) {
-    const member = visibleMembers[i];
-    renderUser.innerHTML += `
+    let renderUser = document.getElementById("users");
+    renderUser.innerHTML = "";
+    const visibleMembers = memberList.filter(member => !deletedMemberIds.includes(member.id));
+    for (let i = 0; i < visibleMembers.length && i < 2; i++) {
+        const member = visibleMembers[i];
+        renderUser.innerHTML += `
       <img src="/assets/images/avatar-trang-4.jpg" alt="meo" id="avatar">
       <div class="user-info">
         <div class="name">${member.name}</div>
         <div class="role">${member.role}</div>
       </div>
     `;
-  }
+    }
 }
 
 function userList(memberList) {
-  let listUser = document.getElementById("user_list");
-  listUser.innerHTML = "";
-  const visibleMembers = memberList.filter(member => !deletedMemberIds.includes(member.id));
-  visibleMembers.forEach((member) => {
-    listUser.innerHTML += `
+    let listUser = document.getElementById("user_list");
+    listUser.innerHTML = "";
+    const visibleMembers = memberList.filter(member => !deletedMemberIds.includes(member.id));
+    visibleMembers.forEach((member) => {
+        listUser.innerHTML += `
       <div class="user">
         <img src="/assets/images/avatar-trang-4.jpg" alt="meo" class="avatar">
         <div class="user-info">
@@ -572,27 +582,27 @@ function userList(memberList) {
         <img src="/assets/icons/Vector.png" alt="delete" class="delete-btn" onclick="deleteUser(${member.id})">
       </div>
     `;
-  });
+    });
 }
 
 function renderChargeDropdown() {
-  const dropdown = document.getElementById("user-charge");
-  if (!dropdown) return;
-  dropdown.innerHTML = '<option value="user-charge" selected disabled hidden>Chọn người phụ trách</option>';
-  const visibleMembers = fullMemberList.filter(member => !deletedMemberIds.includes(member.id));
-  visibleMembers.forEach(member => {
-    dropdown.innerHTML += `<option value="${member.name}">${member.name}</option>`;
-  });
+    const dropdown = document.getElementById("user-charge");
+    if (!dropdown) return;
+    dropdown.innerHTML = '<option value="user-charge" selected disabled hidden>Chọn người phụ trách</option>';
+    const visibleMembers = fullMemberList.filter(member => !deletedMemberIds.includes(member.id));
+    visibleMembers.forEach(member => {
+        dropdown.innerHTML += `<option value="${member.name}">${member.name}</option>`;
+    });
 }
 
 function renderChargeDropdownEdit() {
-  const dropdown = document.getElementById("user-charge-edit");
-  if (!dropdown) return;
-  dropdown.innerHTML = '<option value="user-charge-edit" selected disabled hidden>Chọn người phụ trách</option>';
-  const visibleMembers = fullMemberList.filter(member => !deletedMemberIds.includes(member.id));
-  visibleMembers.forEach(member => {
-    dropdown.innerHTML += `<option value="${member.name}">${member.name}</option>`;
-  });
+    const dropdown = document.getElementById("user-charge-edit");
+    if (!dropdown) return;
+    dropdown.innerHTML = '<option value="user-charge-edit" selected disabled hidden>Chọn người phụ trách</option>';
+    const visibleMembers = fullMemberList.filter(member => !deletedMemberIds.includes(member.id));
+    visibleMembers.forEach(member => {
+        dropdown.innerHTML += `<option value="${member.name}">${member.name}</option>`;
+    });
 }
 
 let add_member = document.getElementById("add-member");
@@ -605,11 +615,11 @@ let errorRole = document.getElementById("errorRole");
 let emailInput = document.getElementById("emailMember");
 let roleInput = document.getElementById("roleInput");
 add_member.onclick = () => {
-  errorEmail.style.display = "none";
-  errorRole.style.display = "none";
-  emailInput.style.border = "";
-  roleInput.style.border = "";
-  membersAdd.style.display = "flex";
+    errorEmail.style.display = "none";
+    errorRole.style.display = "none";
+    emailInput.style.border = "";
+    roleInput.style.border = "";
+    membersAdd.style.display = "flex";
 };
 closeButtonMembers.onclick = () => membersAdd.style.display = "none";
 cancelButtonMembers.onclick = () => membersAdd.style.display = "none";
@@ -619,81 +629,81 @@ addMembersButton.onclick = function () {
     let roleInput = document.getElementById("roleInput");
     let emailValue = emailInput.value.trim();
     let roleValue = roleInput.value.trim();
-    
+
     errorEmail.style.display = "none";
     errorRole.style.display = "none";
     emailInput.style.border = "";
     roleInput.style.border = "";
-    
+
     let hasError = false;
     if (emailValue === "") {
-      errorEmail.textContent = "Vui lòng nhập email";
-      errorEmail.style.display = "block";
-      emailInput.style.border = "1px solid red";
-      hasError = true;
-    } 
+        errorEmail.textContent = "Vui lòng nhập email";
+        errorEmail.style.display = "block";
+        emailInput.style.border = "1px solid red";
+        hasError = true;
+    }
     else if (!emailValue.includes("@") || !(emailValue.endsWith(".com") || emailValue.endsWith(".vn"))) {
-      errorEmail.textContent = "Email không hợp lệ";
-      errorEmail.style.display = "block";
-      emailInput.style.border = "1px solid red";
-      hasError = true;
-    } 
+        errorEmail.textContent = "Email không hợp lệ";
+        errorEmail.style.display = "block";
+        emailInput.style.border = "1px solid red";
+        hasError = true;
+    }
     else if (emailValue.length < 5 || emailValue.length > 50) {
-      errorEmail.textContent = "Email phải có độ dài từ 5 đến 50 ký tự";
-      errorEmail.style.display = "block";
-      emailInput.style.border = "1px solid red";
-      hasError = true;
+        errorEmail.textContent = "Email phải có độ dài từ 5 đến 50 ký tự";
+        errorEmail.style.display = "block";
+        emailInput.style.border = "1px solid red";
+        hasError = true;
     }
     if (roleValue === "") {
-      errorRole.textContent = "Vui lòng nhập vai trò";
-      errorRole.style.display = "block";
-      roleInput.style.border = "1px solid red";
-      hasError = true;
-    } 
+        errorRole.textContent = "Vui lòng nhập vai trò";
+        errorRole.style.display = "block";
+        roleInput.style.border = "1px solid red";
+        hasError = true;
+    }
     else if (roleValue.length < 5 || roleValue.length > 50) {
-      errorRole.textContent = "Vai trò phải có độ dài từ 5 đến 50 ký tự";
-      errorRole.style.display = "block";
-      roleInput.style.border = "1px solid red";
-      hasError = true;
+        errorRole.textContent = "Vai trò phải có độ dài từ 5 đến 50 ký tự";
+        errorRole.style.display = "block";
+        roleInput.style.border = "1px solid red";
+        hasError = true;
     }
     if (hasError) return;
-    
-  const newMember = {
-    id: Math.floor(Math.random() * 1000),
-    name: emailValue.split("@")[0],
-    email: emailValue,
-    role: roleValue
-  };
 
-  fullMemberList.push(newMember);
-  originalMemberList.push(newMember);
-  userList(fullMemberList);
-  renderUser(fullMemberList);
-  renderChargeDropdown();
-  renderChargeDropdownEdit();
-  saveUser();
-  document.getElementById("emailMember").value = "";
-  document.getElementById("roleInput").value = "";
-  membersAdd.style.display = "none";
+    const newMember = {
+        id: Math.floor(Math.random() * 1000),
+        name: emailValue.split("@")[0],
+        email: emailValue,
+        role: roleValue
+    };
+
+    fullMemberList.push(newMember);
+    originalMemberList.push(newMember);
+    userList(fullMemberList);
+    renderUser(fullMemberList);
+    renderChargeDropdown();
+    renderChargeDropdownEdit();
+    saveUser();
+    document.getElementById("emailMember").value = "";
+    document.getElementById("roleInput").value = "";
+    membersAdd.style.display = "none";
 };
 
 function deleteUser(id) {
-  if (!deletedMemberIds.includes(id)) {
-    deletedMemberIds.push(id);
-  }
-  userList(fullMemberList);
-  renderChargeDropdown();
-  renderChargeDropdownEdit();
-  saveUser();
+    if (!deletedMemberIds.includes(id)) {
+        deletedMemberIds.push(id);
+    }
+    userList(fullMemberList);
+    renderChargeDropdown();
+    renderChargeDropdownEdit();
+    saveUser();
 }
 
 function saveUser() {
-  const index = listProject.findIndex(item => item.id === currentProject.id);
-  currentProject.members = fullMemberList.filter(
-    member => member.role !== "Project owner" && !deletedMemberIds.includes(member.id)
-  );
-  listProject[index] = currentProject;
-  localStorage.setItem("projects", JSON.stringify(listProject));
+    const index = listProject.findIndex(item => item.id === currentProject.id);
+    currentProject.members = fullMemberList.filter(
+        member => member.role !== "Project owner" && !deletedMemberIds.includes(member.id)
+    );
+    listProject[index] = currentProject;
+    localStorage.setItem("projects", JSON.stringify(listProject));
 }
 
 let btn_more = document.getElementById("more");
@@ -703,44 +713,44 @@ let btn_cancel = document.getElementById("cancel-btn");
 let listMembers = document.getElementById("overleyRenderMembers");
 
 btn_more.onclick = () => {
-  fullMemberList = JSON.parse(JSON.stringify(originalMemberList));
-  deletedMemberIds = [];
-  renderUser(fullMemberList);
-  userList(fullMemberList);
-  renderChargeDropdown();
-  renderChargeDropdownEdit();
-  listMembers.style.display = "flex";
+    fullMemberList = JSON.parse(JSON.stringify(originalMemberList));
+    deletedMemberIds = [];
+    renderUser(fullMemberList);
+    userList(fullMemberList);
+    renderChargeDropdown();
+    renderChargeDropdownEdit();
+    listMembers.style.display = "flex";
 };
 
 btn_cancel.onclick = () => {
-  listMembers.style.display = "none";
+    listMembers.style.display = "none";
 };
 
 closeMore.onclick = btn_cancel.onclick;
 
 btn_save.onclick = () => {
-  const roleInputs = document.querySelectorAll(".role-field");
-  let visibleIndex = 0;
+    const roleInputs = document.querySelectorAll(".role-field");
+    let visibleIndex = 0;
 
-  fullMemberList.forEach(member => {
-    if (deletedMemberIds.includes(member.id)) return;
-    if (member.role !== "Project owner") {
-      member.role = roleInputs[visibleIndex].value.trim();
-    }
-    visibleIndex++;
+    fullMemberList.forEach(member => {
+        if (deletedMemberIds.includes(member.id)) return;
+        if (member.role !== "Project owner") {
+            member.role = roleInputs[visibleIndex].value.trim();
+        }
+        visibleIndex++;
+        saveUser();
+    });
+
+    fullMemberList = fullMemberList.filter(member => !deletedMemberIds.includes(member.id));
     saveUser();
-  });
+    deletedMemberIds = [];
+    originalMemberList = JSON.parse(JSON.stringify(fullMemberList));
 
-  fullMemberList = fullMemberList.filter(member => !deletedMemberIds.includes(member.id));
-  saveUser();
-  deletedMemberIds = [];
-  originalMemberList = JSON.parse(JSON.stringify(fullMemberList));
-
-  renderUser(fullMemberList);
-  userList(fullMemberList);
-  renderChargeDropdown();
-  renderChargeDropdownEdit();
-  listMembers.style.display = "none";
+    renderUser(fullMemberList);
+    userList(fullMemberList);
+    renderChargeDropdown();
+    renderChargeDropdownEdit();
+    listMembers.style.display = "none";
 };
 document.getElementById("choose").onchange = displayTasks;
 

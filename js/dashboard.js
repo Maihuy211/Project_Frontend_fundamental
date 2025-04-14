@@ -136,14 +136,11 @@ function addProject() {
         hasError = true;
     }
     if (hasError) return;
-    let check = false;
-    for (let i = 0; i < projects.length; i++) {
-        if (projects[i].projectName.toLowerCase() === inputValue.toLowerCase()) {
-            check = true;
-            break;
-        }
-    }
-    if (check) {
+    let userProjects = projects.filter(project => Number(project.ownerId) === user.id);
+    let isDuplicate = userProjects.some(project =>
+        project.projectName.toLowerCase() === inputValue.toLowerCase()
+    );
+    if (isDuplicate) {
         error.textContent = "Tên danh mục đã tồn tại";
         error.style.display = "block";
         projectNameInput.style.border = "1px solid red";
