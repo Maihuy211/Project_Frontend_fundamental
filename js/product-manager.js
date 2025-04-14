@@ -4,6 +4,8 @@ function save() {
     localStorage.setItem('tasks', JSON.stringify(tasks));
 }
 let project = JSON.parse(localStorage.getItem("choosenProject"));
+
+// tên dự án và mô tả 
 let projects = JSON.parse(localStorage.getItem("projects"));
 let titleContent = document.getElementById("title-content");
 let titleText = document.getElementById("text");
@@ -73,22 +75,22 @@ function renderTask() {
     if (tasksToDo !== "") {
         toDo.innerHTML = tasksToDo;
     } else {
-        toDo.innerHTML = `<tr><td colspan="7" style="text-align:center">Chưa có nhiệm vụ nào</td></tr>`;
+        toDo.innerHTML = `<tr><td  style="text-align:center">Chưa có nhiệm vụ nào</td></tr>`;
     }
     if (tasksInProgress !== "") {
         inProgress.innerHTML = tasksInProgress;
     } else {
-        inProgress.innerHTML = `<tr><td colspan="7" style="text-align:center">Chưa có nhiệm vụ nào</td></tr>`;
+        inProgress.innerHTML = `<tr><td style="text-align:center">Chưa có nhiệm vụ nào</td></tr>`;
     }
     if (tasksPending !== "") {
         pending.innerHTML = tasksPending;
     } else {
-        pending.innerHTML = `<tr><td colspan="7" style="text-align:center">Chưa có nhiệm vụ nào</td></tr>`;
+        pending.innerHTML = `<tr><td style="text-align:center">Chưa có nhiệm vụ nào</td></tr>`;
     }
     if (tasksDone !== "") {
         done.innerHTML = tasksDone;
     } else {
-        done.innerHTML = `<tr><td colspan="7" style="text-align:center">Chưa có nhiệm vụ nào</td></tr>`;
+        done.innerHTML = `<tr><td style="text-align:center">Chưa có nhiệm vụ nào</td></tr>`;
     }
     save();
 }
@@ -108,7 +110,7 @@ let errorEndDate = document.getElementById("error-endDate");
 let errorPriority = document.getElementById("error-priority");
 let errorProgress = document.getElementById("error-progress");
 function addMission() {
-    // Reset lỗi trước khi kiểm tra
+    
     errorMissionName.textContent = "";
     errorAssignee.textContent = "";
     errorStatus.textContent = "";

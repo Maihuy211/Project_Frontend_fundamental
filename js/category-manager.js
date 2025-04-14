@@ -22,7 +22,6 @@ function getEditIconHtml(task) {
     return "";
 }
 
-// Tạo dòng task HTML
 function createTaskRow(task) {
     const priorityClass = getPriorityClass(task.priority);
     const progressClass = getProgressClass(task.progress);
@@ -40,11 +39,21 @@ function createTaskRow(task) {
     `;
 }
 
-// Sắp xếp danh sách nhiệm vụ
 function sortTasks(taskList, sortBy) {
     let sortedTasks = [];
     taskList.forEach(task => {
-        sortedTasks.push({ ...task }); // ✅ giữ nguyên theo yêu cầu
+        let copiedTask = {
+            id: task.id,
+            taskName: task.taskName,
+            assigneeId: task.assigneeId,
+            priority: task.priority,
+            assignDate: task.assignDate,
+            dueDate: task.dueDate,
+            progress: task.progress,
+            status: task.status,
+            projectId: task.projectId
+        };
+        sortedTasks.push(copiedTask);
     });
 
     if (sortBy === "Độ ưu tiên") {
@@ -57,7 +66,6 @@ function sortTasks(taskList, sortBy) {
     return sortedTasks;
 }
 
-// Render toàn bộ nhiệm vụ theo từng project
 function renderPersonalMissions() {
     const container = document.getElementById("personal-mission");
     const keyword = document.getElementById("search-Mission").value.toLowerCase();
@@ -84,7 +92,7 @@ function renderPersonalMissions() {
                 taskRows += createTaskRow(task);
             });
         } else {
-            taskRows = `<tr><td colspan="6">Chưa có nhiệm vụ nào</td></tr>`;
+            taskRows = `<tr><td>Chưa có nhiệm vụ nào</td></tr>`;
         }
 
         container.innerHTML += `
@@ -98,11 +106,9 @@ function renderPersonalMissions() {
     });
 }
 
-// Bắt sự kiện search và sort
 document.getElementById("search-Mission").oninput = renderPersonalMissions;
 document.getElementById("choose").onchange = renderPersonalMissions;
 
-// Bắt sự kiện click vào icon sửa (event delegation)
 document.getElementById("personal-mission").addEventListener("click", function (e) {
     if (e.target.classList.contains("edit-icon")) {
         const taskId = e.target.getAttribute("data-id");
@@ -110,13 +116,11 @@ document.getElementById("personal-mission").addEventListener("click", function (
     }
 });
 
-// Mở modal cập nhật
 function openUpdateModal(taskId) {
     currentEditTaskId = Number(taskId);
     document.getElementById("overley-update").style.display = "flex";
 }
 
-// Nút xác nhận sửa nhiệm vụ
 document.getElementById("buttonUpdate").onclick = function () {
     const index = tasks.findIndex(task => task.id === currentEditTaskId);
     if (index !== -1) {
@@ -131,11 +135,9 @@ document.getElementById("buttonUpdate").onclick = function () {
     document.getElementById("overley-update").style.display = "none";
 
 }
-// Đóng modal
 document.getElementById("close-update").onclick =
 document.getElementById("buttonCancel-update").onclick = function () {
-    document.getElementById("overley-update").style.display = "none";
+document.getElementById("overley-update").style.display = "none";
 };
 
-// Gọi render ngay khi trang sẵn sàng
 renderPersonalMissions();

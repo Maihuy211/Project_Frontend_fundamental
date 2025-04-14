@@ -2,7 +2,6 @@ const user = JSON.parse(localStorage.getItem("loggedInUser"));
 if (!user) {
     window.location.href = "/pages/login.html";
 }
-
 const projects = JSON.parse(localStorage.getItem("projects")) || [];
 function save() {
     localStorage.setItem('projects', JSON.stringify(projects));
