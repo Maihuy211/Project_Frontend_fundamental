@@ -2,7 +2,36 @@ const user = JSON.parse(localStorage.getItem("loggedInUser"));
 if (!user) {
     window.location.href = "/pages/login.html";
 }
-const projects = JSON.parse(localStorage.getItem("projects")) || [];
+const projects = JSON.parse(localStorage.getItem("projects")) || [
+    {
+        id: 1,
+        projectName: "Xây dựng website thương mại điện tử",
+        description: "Dự án nhằm phát triển một nền tảng thương mại điện tử với các tính năng như giỏ hàng, thanh toán và quản lý sản phẩm.",
+        members: [],
+        ownerId: 1
+    },
+    {
+        id: 2,
+        projectName: "Phát triển ứng dụng di động",
+        description: "Ứng dụng di động là phần mềm chạy trên điện thoại, giúp người dùng thực hiện các tác vụ và truy cập dịch vụ mọi lúc, mọi nơi.",
+        members: [],
+        ownerId: 1
+    },
+    {
+        id: 3,
+        projectName: "Quản lý dữ liệu khách hàng",
+        description: "Quản lý dữ liệu khách hàng là lưu trữ và sử dụng thông tin khách hàng để cải thiện dịch vụ và mối quan hệ.",
+        members: [],
+        ownerId: 1
+    },
+    {
+        id: 4,
+        projectName: "Dự án A",
+        description: "dự án cá nhân A",
+        members: [],
+        ownerId: 1
+    }
+];
 function save() {
     localStorage.setItem('projects', JSON.stringify(projects));
 }
@@ -14,7 +43,7 @@ function filter(text) {
 function renderProject() {
     let listProject = document.getElementById("projects");
     listProject.innerHTML = "";
-    let userProjects = projects.filter(project => Number(project.ownerId) === user.id);
+    let userProjects = projects.filter(project => Number(project.ownerId) === Number(user.id));
     const start = (currentPage - 1) * rowsPerPage;
     const paginatedItems = userProjects.slice(start, start + rowsPerPage);
 
@@ -136,7 +165,7 @@ function addProject() {
         hasError = true;
     }
     if (hasError) return;
-    let userProjects = projects.filter(project => Number(project.ownerId) === user.id);
+    let userProjects = projects.filter(project => Number(project.ownerId) === Number(user.id));
     let isDuplicate = userProjects.some(project =>
         project.projectName.toLowerCase() === inputValue.toLowerCase()
     );
@@ -289,7 +318,7 @@ let searchInput = document.getElementById("search-Project");
 searchInput.onkeydown = function (item) {
     if (item.key === "Enter") {
         searchProjects(searchInput.value);
-        return; 
+        return;
     }
 };
 function searchProjects(keyword) {

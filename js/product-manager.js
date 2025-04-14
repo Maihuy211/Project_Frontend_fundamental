@@ -1,4 +1,17 @@
-let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [
+    {
+        id: 1,
+        taskName: "Soạn thảo đề cương dự án",
+        assigneeId: "Mai Văn Huy",
+        projectId: 1,
+        assignDate: "2025-03-24",
+        dueDate: "2025-03-26",
+        priority: "Thấp",
+        progress: "Đúng tiến độ",
+        status: "To do",
+        ownerId: 1,
+    }
+];
 const user = JSON.parse(localStorage.getItem("loggedInUser"));
 function save() {
     localStorage.setItem('tasks', JSON.stringify(tasks));
