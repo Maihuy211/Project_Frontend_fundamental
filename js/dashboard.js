@@ -228,13 +228,13 @@ function deleteProject(id) {
 function editProject(id) {
     let projectEdit = document.getElementById("overley-edit");
     let projectNameEditInput = document.getElementById("projectNameEdit");
-    let describeEditInput = document.getElementById("describeEdit"); // Lấy phần mô tả
+    let describeEditInput = document.getElementById("describeEdit"); 
     let editError = document.getElementById("editError");
     let editErrorDescribe = document.getElementById("editErrorDescribe");
 
     let project = projects.find((task) => task.id === id);
     projectNameEditInput.value = project.projectName;
-    describeEditInput.value = project.description || "";
+    describeEditInput.value = project.description;
     editError.style.display = "none";
     editErrorDescribe.style.display = "none";
     projectEdit.style.display = "flex";
@@ -327,7 +327,7 @@ function searchProjects(keyword) {
     let flag;
     if (keyword === "") {
         renderProject();
-        return; // 
+        return;  
     } else {
         flag = projects.filter(item =>
             item.ownerId === user.id && item.projectName.toLowerCase().includes(keyword.toLowerCase())

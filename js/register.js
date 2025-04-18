@@ -77,7 +77,7 @@ document.getElementById("btn").onclick = function() {
         timer: 1500
       });
       setTimeout(()=>{
-        window.location.href = "dashboard.html";
+        window.location.href = "login.html";
     },1500)
     
 };

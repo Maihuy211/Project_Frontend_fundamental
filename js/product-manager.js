@@ -107,6 +107,7 @@ function renderTask() {
     }
     save();
 }
+// Them nhiem vu
 let taskName = document.getElementById("missionName");
 let assigneeId = document.getElementById("user-charge");
 let status = document.getElementById("status");
@@ -526,9 +527,9 @@ const listProject = JSON.parse(localStorage.getItem("projects")) || [];
 const projectId = JSON.parse(localStorage.getItem("choosenProject"));
 const currentProject = listProject.find(item => item.id === projectId);
 
-let originalMemberList = []; // Danh sách gốc để reset khi hủy
-let fullMemberList = [];     // Danh sách hiển thị
-let deletedMemberIds = [];   // Danh sách ID bị đánh dấu xóa
+let originalMemberList = []; 
+let fullMemberList = [];     
+let deletedMemberIds = [];   
 
 function initializeFullMemberList() {
     const user = JSON.parse(localStorage.getItem("loggedInUser"));
@@ -786,7 +787,7 @@ function sortTasks(taskList, sortBy) {
     });
 
     if (sortBy === "Độ ưu tiên") {
-        const priorityOrder = { "Cao": 3, "Trung bình": 2, "Thấp": 1 };
+        let priorityOrder = { "Cao": 3, "Trung bình": 2, "Thấp": 1 };
         sortedTasks.sort((a, b) => priorityOrder[b.priority] - priorityOrder[a.priority]);
     } else if (sortBy === "Hạn chót") {
         sortedTasks.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));

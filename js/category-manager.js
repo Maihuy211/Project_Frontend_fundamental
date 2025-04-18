@@ -26,7 +26,6 @@ function createTaskRow(task) {
     const priorityClass = getPriorityClass(task.priority);
     const progressClass = getProgressClass(task.progress);
     const editIconHtml = getEditIconHtml(task);
-
     return `
         <tr>
             <td class="col1">${task.taskName}</td>
